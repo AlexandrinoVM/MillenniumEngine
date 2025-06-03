@@ -8,22 +8,21 @@
 #include "../include/headers/ebo.hpp"
 
 
-
 int main() {
     float vertices[] = {
-           0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // vértice 1: vermelho
-           0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // vértice 2: verde
-           -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // vértice 3: azul
-           -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // vértice 3: azul
+        0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   
+        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   
     };
 
-    unsigned int indices[] = {  // note that we start from 0!
-    0, 1, 3,   // first triangle
-    1, 2, 3    // second triangle
+    unsigned int indices[] = {  
+    0, 1, 3,   
+    1, 2, 3    
     }; 
     
     Core core;
-    core.init("janela",800,500);
+    core.init("janela",800,600);
    
     VAO vao;
     
@@ -36,8 +35,12 @@ int main() {
     shader s("../shaders/shader.vert","../shaders/shader.frag");
     
     while(core.isrunning()){
+        
         core.clear();
         s.useProgram();
+        
+        s.setFloat("oFsset",0.5);
+
         vao.bindVAO();
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
         core.run();

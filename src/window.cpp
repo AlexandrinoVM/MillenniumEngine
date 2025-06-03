@@ -1,6 +1,10 @@
 #include "../include/headers/window.hpp"
 
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
 void window::init(const char*text,int w,int h){
     if(!glfwInit()){
         std::cerr <<"faild to initialize GLFW\n";
@@ -26,8 +30,8 @@ void window::init(const char*text,int w,int h){
         std::cerr << "Failed to initialize GLAD\n";
         exit(EXIT_FAILURE);
     }
-
-    glViewport(0, 0, height, widht);
+    //function to adjust viewport on hyprland because the manegement window system can adjust de window making the objets out of center
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 };
 
 void window::close(){
