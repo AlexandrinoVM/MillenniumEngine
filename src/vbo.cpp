@@ -16,3 +16,7 @@ void VBO::bindVBO(){
 void VBO::unbidVBO(){
     glBindBuffer(GL_ARRAY_BUFFER,0);
 }
+
+void VBO::setData(glm::vec3  data){
+
+}

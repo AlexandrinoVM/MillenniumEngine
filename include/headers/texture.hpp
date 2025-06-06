@@ -11,6 +11,7 @@ class Texture{
     unsigned int generateTexture();
     void bindTexture(unsigned int Texture);
     void reverseImage();
+    void activeText(int type);
     private:
     int width,height,nerchannels;
     unsigned char* data;

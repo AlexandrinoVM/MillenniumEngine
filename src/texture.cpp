@@ -34,3 +34,7 @@ void Texture::bindTexture(unsigned int Texture){
 void Texture::reverseImage(){
     stbi_set_flip_vertically_on_load(true);
 }
+
+void Texture::activeText(int type){
+    glActiveTexture(type);
+}
