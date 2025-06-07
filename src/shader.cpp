@@ -23,7 +23,7 @@ std::string shader::loadSource(const std::string &pathShader){
         }
 }
 
-shader::shader(const std::string &vertfrag,const std::string &fragment){
+void shader::Loadshader(const std::string &vertfrag,const std::string &fragment){
     
     std::string vert = loadSource(vertfrag);
     std::string frag = loadSource(fragment);
@@ -101,6 +101,10 @@ void shader::setFloat(const std::string &name,float value)const{
     glUniform1f(glGetUniformLocation(ID,name.c_str()),value);
 }
 
+
+void shader::setMat4(const std::string &name,glm::mat4 data)const{
+    glUniformMatrix4fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,glm::value_ptr(data));
+}
 
 void shader::useProgram(){
     glUseProgram(ID);

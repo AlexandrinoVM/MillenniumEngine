@@ -17,6 +17,10 @@ void VBO::unbidVBO(){
     glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 
-void VBO::setData(glm::vec3  data){
+void VBO::setData(glm::vec3 *data,size_t size){
+    glGenBuffers(1,&vbo);
 
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+
+    glBufferData(GL_ARRAY_BUFFER,size,data,GL_STATIC_DRAW);
 }

@@ -9,7 +9,7 @@ class VBO{
     void bindVBO();
     void unbidVBO();
     void destroyVBO();
-    void setData(glm::vec3 data);
+    void setData(glm::vec3 *data,size_t size);
     unsigned int getVBO(){return vbo;};
     private:
     unsigned int vbo;

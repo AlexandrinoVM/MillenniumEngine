@@ -8,26 +8,35 @@
 #include "../include/headers/ebo.hpp"
 #include <headers/texture.hpp>
 #include <headers/tranfomation.hpp>
+#include <headers/camera.hpp>
+
 
 int main() {
     float vertices[] = {
     // Posição           // Cor           // UV
     // Frente
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, // 0: frente topo dir
-     0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, // 1: frente baixo dir
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, // 2: frente baixo esq
-    -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, // 3: frente topo esq
+     0.5f,  0.5f,  0.5f,   // 0: frente topo dir
+     0.5f, -0.5f,  0.5f,   // 1: frente baixo dir
+    -0.5f, -0.5f,  0.5f,     // 2: frente baixo esq
+    -0.5f,  0.5f,  0.5f,     // 3: frente topo esq
 
     // Trás
-     0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f, // 4: trás topo dir
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  1.0f, 0.0f, // 5: trás baixo dir
-    -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f, // 6: trás baixo esq
-    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f  // 7: trás topo esq
+     0.5f,  0.5f, -0.5f,    // 4: trás topo dir
+     0.5f, -0.5f, -0.5f,  // 5: trás baixo dir
+    -0.5f, -0.5f, -0.5f,   // 6: trás baixo esq
+    -0.5f,  0.5f, -0.5f   // 7: trás topo esq
 };
 
     float colors[] = {
-        
-    }
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 
+        0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 1.0f, 
+        1.0f, 1.0f, 1.0f, 
+        0.0f, 0.0f, 0.0f
+    };
 
 
 unsigned int indices[] = {
@@ -72,7 +81,7 @@ glm::vec3 cubePositions[] = {
 
     Core core;
     core.init("janela",800,600);
-   
+    
     Tranformations trans;
 
 
@@ -85,56 +94,52 @@ glm::vec3 cubePositions[] = {
     VAO vao;
     VBO vbo1(vertices,sizeof(vertices));
     vbo1.bindVBO();
-    vao.VAOatribs(0,3,8,0);
-    vao.VAOatribs(1,3,8,3);
-    vao.VAOatribs(2,2,8,6);
+    vao.VAOatribs(0,3,3,0);
+    vbo1.unbidVBO();
+    VBO vbocolor(colors,sizeof(colors));
+    vao.VAOatribs(1,3,3,0);
+    vbocolor.unbidVBO();
     EBO ebo1(indices,36);
-   
-    shader s("../shaders/shader.vert","../shaders/shader.frag");
-    s.useProgram();
-    s.setint("texture1",0);
-    s.setint("texture2",1);
+
+    core.loadShaders("../shaders/shader.vert","../shaders/shader.frag");
+    core.useProgram();
     
-    
-    
-    int modell = glGetUniformLocation(s.getID(),"model");
-    int projectionl = glGetUniformLocation(s.getID(),"projection");
-    int viewl = glGetUniformLocation(s.getID(),"view");
-    
-    
+    //Camera cam;
+    //core.shaderConfig().setMat4("view",cam.getCamera());
     float lastFrame = 0.0f;
     float angle = 0.0f;
+    int count =0; 
     while(core.isrunning()){
-        for(int i;i < 0;i++){
-            
-        }
+        
+        core.clear();
         float currentTime = glfwGetTime();
         float deltaTime = currentTime - lastFrame;
         lastFrame = currentTime;
-        angle += 45.0f * deltaTime;
-        glm::mat4 model = glm::mat4(1.0f);
-        float dt = glfwGetTime();
-        model = glm::rotate(model,glm::radians(angle),glm::vec3(0.5f,0.1f,0.5f));
+        angle += 0.05f;
         
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view,glm::vec3(0.0f,0.0f,-5.0f));
-        
+        vao.bindVAO();
+
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
+        core.shaderConfig().setMat4("projection",projection);
         
-        core.clear();
-        
-        s.setFloat("oFsset",dt);
+        for(int i=0; i<10;i++){
+            
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+            core.shaderConfig().setMat4("model", model);
+            
+            glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+                    
+        }
         t.activeText(GL_TEXTURE0);
         t.bindTexture(textura1);
         t.activeText(GL_TEXTURE1);
         t.bindTexture(textura2);
-        glUniformMatrix4fv(modell,1,GL_FALSE,glm::value_ptr(model));
-        glUniformMatrix4fv(viewl,1,GL_FALSE,glm::value_ptr(view));
-        glUniformMatrix4fv(projectionl,1,GL_FALSE,glm::value_ptr(projection));
-        
-        vao.bindVAO();
-        glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
         core.run();
+           
+        
+        
     }
     vao.unbidVAO();
     core.close();

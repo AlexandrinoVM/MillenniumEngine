@@ -2,16 +2,17 @@
 
 
 void Renderer::events(){
-    processInput(win);
+    processInput();
 }
 
-void Renderer::init(GLFWwindow *window){
-    win = window;
+void Renderer::init(GLFWwindow *win,Camera *cam){
+    window = win;
+    camera = cam;
     running = true;
     glClearColor(0,0,0,0);
 }
 
-void Renderer::processInput(GLFWwindow*window){
+void Renderer::processInput(){
     if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
         running = false;
     }
@@ -26,6 +27,19 @@ void Renderer::processInput(GLFWwindow*window){
             count = 0;
         }
     } 
+
+    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
+        camera->moveFoward();
+    }
+     if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){
+        camera->moveBackward();
+    }
+     if(glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS){
+        camera->moveLeft();
+    }
+     if(glfwGetKey(window,GLFW_KEY_D) == GLFW_PRESS){
+        camera->moveRigth();
+    }
 }
 
 void Renderer::clear(){
@@ -35,6 +49,6 @@ void Renderer::clear(){
 
 void Renderer::RenderWindow(){
     glfwPollEvents();
-    glfwSwapBuffers(win);
+    glfwSwapBuffers(window);
 }
 
