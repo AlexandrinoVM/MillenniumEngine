@@ -81,9 +81,6 @@ glm::vec3 cubePositions[] = {
 
     Core core;
     core.init("janela",800,600);
-    
-    Tranformations trans;
-
 
     Texture t;
     t.loadTexture("../assets/container.jpg");

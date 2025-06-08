@@ -31,3 +31,7 @@ void Camera::moveRigth(){
     cameraPos = cameraPos + cameraLeft * (-speed);
     view= glm::lookAt(cameraPos,cameraPos + cameraTarget,cameraup);
 }
+
+void Camera::setdirection(glm::vec3 &direction){
+    view= glm::lookAt(cameraPos,cameraPos + direction,cameraup);
+}
