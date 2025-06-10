@@ -15,12 +15,12 @@ void Core::clear(){
     Render.clear();
 }
 
-void Core::loadShaders(const std::string &vert,const std::string &frag){
-    Shader.Loadshader(vert,frag);
+void Core::loadShaders(const std::string &ShaderName, const std::string &vert,const std::string &frag){
+    Shader.Loadshader(ShaderName,vert,frag);
 }
 
-void Core::useProgram(){
-    Shader.useProgram();
+void Core::useProgram(const std::string &Shadername){
+    Shader.useProgram(Shadername);
 }
 
 int Core::getProgramId(){

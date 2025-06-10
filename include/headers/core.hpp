@@ -14,8 +14,8 @@ class Core {
     bool isrunning(){return Render.isRunning();}
     void close(){Window.close(); glfwTerminate();};
     void clear();
-    void loadShaders(const std::string &vert,const std::string &frag);
-    void useProgram();
+    void loadShaders(const std::string &ShaderName,const std::string &vert,const std::string &frag);
+    void useProgram(const std::string &Shadername);
     shader& shaderConfig(){return Shader;};
     Camera& CameraConfigs() { return camera;};
     int getProgramId();

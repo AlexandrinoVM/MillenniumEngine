@@ -23,7 +23,7 @@ std::string shader::loadSource(const std::string &pathShader){
         }
 }
 
-void shader::Loadshader(const std::string &vertfrag,const std::string &fragment){
+void shader::Loadshader(const std::string &ShaderName,const std::string &vertfrag,const std::string &fragment){
     
     std::string vert = loadSource(vertfrag);
     std::string frag = loadSource(fragment);
@@ -69,6 +69,8 @@ void shader::Loadshader(const std::string &vertfrag,const std::string &fragment)
     
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);  
+    std::cout <<ShaderName << ":" <<ID << std::endl;
+    shaders.insert(std::make_pair(ShaderName,ID));
 }
 
   
@@ -106,10 +108,14 @@ void shader::setMat4(const std::string &name,glm::mat4 data)const{
     glUniformMatrix4fv(glGetUniformLocation(ID,name.c_str()),1,GL_FALSE,glm::value_ptr(data));
 }
 
-void shader::useProgram(){
-    glUseProgram(ID);
+void shader::setVec3(const std::string &nameProgram,const std::string &nameShader, glm::vec3 data){
+    glUniform3fv(glGetUniformLocation(shaders[nameProgram],nameShader.c_str()),1,glm::value_ptr(data));
+};
+
+void shader::useProgram(const std::string &Shadername){
+    glUseProgram(shaders[Shadername]);
 }
 
 void shader::stop(){
-    glUseProgram(ID);
+    glUseProgram(0);
 }

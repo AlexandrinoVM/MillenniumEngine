@@ -27,6 +27,21 @@ int main() {
     -0.5f,  0.5f, -0.5f   // 7: trás topo esq
 };
 
+    float LightVertices[] = {
+    // Posição           // Cor           // UV
+    // Frente
+     0.25f,  0.25f,  0.25f,   // 0: frente topo dir
+     0.25f, -0.25f,  0.25f,   // 1: frente baixo dir
+    -0.25f, -0.25f,  0.25f,     // 2: frente baixo esq
+    -0.25f,  0.25f,  0.25f,     // 3: frente topo esq
+
+    // Trás
+     0.25f,  0.25f, -0.25f,    // 4: trás topo dir
+     0.25f, -0.25f, -0.25f,  // 5: trás baixo dir
+    -0.25f, -0.25f, -0.25f,   // 6: trás baixo esq
+    -0.25f,  0.25f, -0.25f   // 7: trás topo esq
+};
+
     float colors[] = {
         1.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 
@@ -98,19 +113,23 @@ glm::vec3 cubePositions[] = {
     vbocolor.unbidVBO();
     EBO ebo1(indices,36);
     vao.unbidVAO();
-    core.loadShaders("../shaders/shader.vert","../shaders/shader.frag");
+    core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
+    //core.shaderConfig().setVec3("f","objectColor",{1.0,0.5,0.3});
+    //core.shaderConfig().setVec3("f","lightColor",{0.1,0.6,0.4});
     core.shaderConfig().stop();
-
+    
     VAO vao2;
-    VBO vbo2(vertices,sizeof(vertices));
+    VBO vbo2(LightVertices,sizeof(LightVertices));
     vbo2.bindVBO();
     vao2.VAOatribs(0,3,3,0);
     vbo2.unbidVBO();
     EBO ebo2(indices,36);
-
-    shader ligth;
-    ligth.Loadshader("../shaders/light.vert","../shaders/light.frag");
     vao2.unbidVAO();
+    
+    //shader ligth;
+    //ligth.Loadshader("lightCube","../shaders/light.vert","../shaders/light.frag");
+    core.loadShaders("lightCube","../shaders/light.vert","../shaders/light.frag");
+    core.shaderConfig().stop();
     //Camera cam;
     //core.shaderConfig().setMat4("view",cam.getCamera());
     float lastFrame = 0.0f;
@@ -125,14 +144,14 @@ glm::vec3 cubePositions[] = {
         angle += 0.05f;
         
         //first cube
-        core.useProgram();
+        core.useProgram("teste");
         vao.bindVAO();
         
         glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
         glm::mat4 view = core.CameraConfigs().getCamera();
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePositions[3]);
-        model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+        model = glm::translate(model, glm::vec3(0.5f,0.0f,-10.f));
+        model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
         core.shaderConfig().setMat4("model", model);
         core.shaderConfig().setMat4("projection",projection);
         core.shaderConfig().setMat4("view",view);
@@ -143,19 +162,19 @@ glm::vec3 cubePositions[] = {
         vao.unbidVAO();
 
         //segundo cubo
-        ligth.useProgram();
+        core.useProgram("lightCube");
         vao2.bindVAO();
 
         glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, cubePositions[4]);
-        model2 = glm::rotate(model2, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+        model2 = glm::translate(model2, glm::vec3(2.0f,0.0f,-10.f));
+        model2 = glm::rotate(model2, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
-        ligth.setMat4("model", model2);
-        ligth.setMat4("projection", projection);
-        ligth.setMat4("view", view);
+        core.shaderConfig().setMat4("model", model2);
+        core.shaderConfig().setMat4("projection", projection);
+        core.shaderConfig().setMat4("view", view);
 
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
-        ligth.stop();
+        core.shaderConfig().stop();
         vbo2.unbidVBO();
         t.activeText(GL_TEXTURE0);
         t.bindTexture(textura1);
