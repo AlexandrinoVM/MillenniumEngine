@@ -15,7 +15,7 @@ class shader{
     void crateProgram(const unsigned int vert,const unsigned int frag);
     void useProgram();
     int getID(){return ID;};
-
+    void stop();
     
     void setBool(const std::string &name,bool value)const;
     void setFloat(const std::string &name,float value)const;

@@ -109,3 +109,7 @@ void shader::setMat4(const std::string &name,glm::mat4 data)const{
 void shader::useProgram(){
     glUseProgram(ID);
 }
+
+void shader::stop(){
+    glUseProgram(ID);
+}

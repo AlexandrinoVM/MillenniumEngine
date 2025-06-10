@@ -7,7 +7,7 @@ void Core::init(const char*text,int w,int h){
 
 void Core::run(){
     Render.events();
-    shaderConfig().setMat4("view",camera.getCamera());
+    //shaderConfig().setMat4("view",camera.getCamera());
     Render.RenderWindow();
 }
 
