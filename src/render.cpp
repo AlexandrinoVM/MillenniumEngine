@@ -57,7 +57,7 @@ void Renderer::processInput(){
     if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
         running = false;
     }
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS){
+    if(glfwGetKey(window,GLFW_KEY_F8) == GLFW_PRESS){
         if(!count){
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             std::cout << count << std::endl;

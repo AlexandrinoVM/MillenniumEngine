@@ -17,11 +17,12 @@ class shader{
     int getID(){return ID;};
     void stop();
     
-    void setBool(const std::string &name,bool value)const;
-    void setFloat(const std::string &name,float value)const;
-    void setint(const std::string &name,int value)const;
-    void setMat4(const std::string &name, glm::mat4 data)const;
+    void setBool(const std::string &nameProgram,const std::string &name,bool value);
+    void setFloat(const std::string &nameProgram,const std::string &name,float value);
+    void setint(const std::string &nameProgram,const std::string &name,int value);
+    void setMat4(const std::string &nameProgram,const std::string &name, glm::mat4 data);
     void setVec3(const std::string &nameProgram,const std::string &name, glm::vec3 data);
+    void setVec4(const std::string &nameProgram,const std::string &name, glm::vec4 data);
     private:
     std::string loadSource(const std::string &VertexPath);
     std::map<std::string,int> shaders;
