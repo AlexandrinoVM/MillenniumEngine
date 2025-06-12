@@ -5,6 +5,7 @@ class VAO{
     public:
     VAO();
     void bindVAO();
+    void bindVBO(unsigned int vao);
     void unbidVAO();
     void destroyVAO();
     unsigned int getVAO(){return vao;};

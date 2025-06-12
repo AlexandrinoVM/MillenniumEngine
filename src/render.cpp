@@ -89,12 +89,13 @@ void Renderer::processInput(){
         if(mouseOnscreen){
             glfwSetCursorPosCallback(window,mouseCalback);
         }
+        mouseOnscreen = false;
         
-    }else if(mouseOnscreen){
+    }else {
         if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE){
-            glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
-            
             mouseOnscreen = false;
+            glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
+            glfwSetCursorPosCallback(window,nullptr);
         }
     }
 
