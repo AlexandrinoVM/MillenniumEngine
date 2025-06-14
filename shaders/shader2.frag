@@ -5,8 +5,10 @@ in vec2 TextCoord;
 
 
 struct Material{
-    sampler2D diffuse;
-    sampler2D specular;
+    sampler2D texture_diffuse1;
+    sampler2D texture_diffuse2;
+    sampler2D texture_specular1;
+    sampler2D texture_specular2;
 };
 
 struct Light{
@@ -21,6 +23,11 @@ struct Light{
 
 uniform Material material;
 
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_specular2;
+
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform float ambientLight;
@@ -34,19 +41,19 @@ uniform float oFsset;
 
 void main() {
     //ambient
-    vec3 ambient = light.ambient * texture(material.diffuse,TextCoord).rgb;
+    vec3 ambient = light.ambient * texture(texture_diffuse1,TextCoord).rgb;
 
     //diffuse
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TextCoord).rgb;
+    vec3 diffuse = light.diffuse * diff * texture(texture_diffuse1, TextCoord).rgb;
 
     //especular
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir,norm);
     float spec = pow(max(dot(viewDir,reflectDir),0.0),light.shininess);
-    vec3 specular = lightColor * spec *texture(material.specular,TextCoord).rgb;
+    vec3 specular = lightColor * spec *texture(texture_specular1,TextCoord).rgb;
 
     vec3 result = ambient + diffuse + specular;
 

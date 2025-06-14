@@ -10,6 +10,8 @@
 #include <headers/tranfomation.hpp>
 #include <headers/camera.hpp>
 #include <glm/gtc/matrix_inverse.hpp> 
+#include <headers/model.hpp>
+
 
 int main() {
     float vertices[] = {
@@ -145,81 +147,99 @@ unsigned int indices[] = {
     
     glm::vec3 lightColor = glm::vec3(1.0f,1.0f,1.0f);
 
-    core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
-    core.useProgram("teste");
-    core.shaderConfig().setVec3("teste","objectColor",{1.0f, 0.5f, 0.31f});
-    core.shaderConfig().setVec3("teste","lightColor",lightColor);
-    //glm::vec3 lightPos = {1.2f,1.0f,-8.0f};
+    core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
+    Model mochila("../models/backpack/backpack.obj");
     glm::vec3 lightPos = {0.5f,1.0f,-10.f};
-    core.shaderConfig().setVec3("teste","lightPos",lightPos);
-    core.shaderConfig().setFloat("teste","ambientLight",0.1);
-    core.shaderConfig().setVec3("teste","material.ambient", {1.0f, 0.5f, 0.31f});
-    core.shaderConfig().setVec3("teste","material.diffuse", {1.0f, 0.5f, 0.31f});
-    core.shaderConfig().setVec3("teste","material.specular", {0.5f, 0.5f, 0.5f});
-    core.shaderConfig().setFloat("teste","material.shininess", 32.0f);
+    core.useProgram("model");
+    //core.shaderConfig().setVec3("model","lightPos",lightPos);
+    core.shaderConfig().setFloat("model","light.ambient",0.1);
+    core.shaderConfig().setVec3("model","light.ambient", {1.0f, 0.5f, 0.31f});
+    core.shaderConfig().setVec3("model","light.diffuse", {1.0f, 0.5f, 0.31f});
+    core.shaderConfig().setVec3("model","light.specular", {0.5f, 0.5f, 0.5f});
+    core.shaderConfig().setFloat("model","light.shininess", 32.0f);
     core.shaderConfig().stop();
+
+    shader teste;
+
+    // core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
+    // core.useProgram("teste");
+    // core.shaderConfig().setVec3("teste","objectColor",{1.0f, 0.5f, 0.31f});
+    // core.shaderConfig().setVec3("teste","lightColor",lightColor);
+    // //glm::vec3 lightPos = {1.2f,1.0f,-8.0f};
+    // glm::vec3 lightPos = {0.5f,1.0f,-10.f};
+    // core.shaderConfig().setVec3("teste","lightPos",lightPos);
+    // core.shaderConfig().setFloat("teste","ambientLight",0.1);
+    // core.shaderConfig().setVec3("teste","material.ambient", {1.0f, 0.5f, 0.31f});
+    // core.shaderConfig().setVec3("teste","material.diffuse", {1.0f, 0.5f, 0.31f});
+    // core.shaderConfig().setVec3("teste","material.specular", {0.5f, 0.5f, 0.5f});
+    // core.shaderConfig().setFloat("teste","material.shininess", 32.0f);
+    // core.shaderConfig().stop();
     
-    VAO vao2;
-    VBO vbo2(LightVertices,sizeof(LightVertices));
-    vbo2.bindVBO();
-    vao2.VAOatribs(0,3,3,0);
-    vbo2.unbidVBO();
-    EBO ebo2(indices,36);
-    vao2.unbidVAO();
+    // VAO vao2;
+    // VBO vbo2(LightVertices,sizeof(LightVertices));
+    // vbo2.bindVBO();
+    // vao2.VAOatribs(0,3,3,0);
+    // vbo2.unbidVBO();
+    // EBO ebo2(indices,36);
+    // vao2.unbidVAO();
     
-    core.loadShaders("lightCube","../shaders/light.vert","../shaders/light.frag");
-    core.useProgram("lightCube");
-    core.shaderConfig().setVec3("lightCube","lightColor",lightColor);
-    core.shaderConfig().stop();
+    // core.loadShaders("lightCube","../shaders/light.vert","../shaders/light.frag");
+    // core.useProgram("lightCube");
+    // core.shaderConfig().setVec3("lightCube","lightColor",lightColor);
+    // core.shaderConfig().stop();
     float lastFrame = 0.0f;
     float angle = 0.0f;
     int count =0; 
     while(core.isrunning()){
         
         core.clear();
-        float currentTime = glfwGetTime();
-        float deltaTime = currentTime - lastFrame;
-        lastFrame = currentTime;
-        angle += 0.05f;
+    //     float currentTime = glfwGetTime();
+    //     float deltaTime = currentTime - lastFrame;
+    //     lastFrame = currentTime;
+    //     angle += 0.05f;
         
-        //first cube
-        core.useProgram("teste");
-        vao.bindVAO();
-        t.activeText(GL_TEXTURE0);
-        t.bindTexture(textura1);
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
-        glm::mat4 view = core.CameraConfigs().getCamera();
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.5f,-1.0f,-10.f));
-        model = glm::scale(model, glm::vec3(5.f));
-       //model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-        core.shaderConfig().setMat4("teste","model", model);
-        core.shaderConfig().setMat4("teste","projection",projection);
-        core.shaderConfig().setMat4("teste","view",view);
-        glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
-        core.shaderConfig().setVec3("teste","camPos",camView);
+    //     //first cube
+    //     core.useProgram("teste");
+    //     vao.bindVAO();
+    //     t.activeText(GL_TEXTURE0);
+    //     t.bindTexture(textura1);
+            core.useProgram("model");
+            
+            glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
+            glm::mat4 view = core.CameraConfigs().getCamera();
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(0.5f,-1.0f,-10.f));
+            model = glm::scale(model, glm::vec3(1.f));
+            model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+            core.shaderConfig().setMat4("model","model", model);
+            core.shaderConfig().setMat4("model","projection",projection);
+            core.shaderConfig().setMat4("model","view",view);
+            core.shaderConfig().setFloat("model", "light.shininess", 32.0f);
+            glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
+            core.shaderConfig().setVec3("model","camPos",camView);
+            mochila.DrawModel(teste,"model");
        
         
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-        core.shaderConfig().stop();
-        vao.unbidVAO();
+    //     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+    //     core.shaderConfig().stop();
+    //     vao.unbidVAO();
 
-        //segundo cubo
-        core.useProgram("lightCube");
-        vao2.bindVAO();
+    //     //segundo cubo
+    //     core.useProgram("lightCube");
+    //     vao2.bindVAO();
 
-        glm::mat4 model2 = glm::mat4(1.0f);
-        model2 = glm::translate(model2, glm::vec3(0.5f,1.0f,-10.f));
-        model2 = glm::scale(model2, glm::vec3(0.5f));
-       // model2 = glm::rotate(model2, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+    //     glm::mat4 model2 = glm::mat4(1.0f);
+    //     model2 = glm::translate(model2, glm::vec3(0.5f,1.0f,-10.f));
+    //     model2 = glm::scale(model2, glm::vec3(0.5f));
+    //    // model2 = glm::rotate(model2, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 
-        core.shaderConfig().setMat4("lightCube","model", model2);
-        core.shaderConfig().setMat4("lightCube","projection", projection);
-        core.shaderConfig().setMat4("lightCube","view", view);
+        // core.shaderConfig().setMat4("lightCube","model", model2);
+        // core.shaderConfig().setMat4("lightCube","projection", projection);
+        // core.shaderConfig().setMat4("lightCube","view", view);
        
-        glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
-        core.shaderConfig().stop();
-        vbo2.unbidVBO();
+        // glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
+        // core.shaderConfig().stop();
+        // vbo2.unbidVBO();
        
         core.run();
            

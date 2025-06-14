@@ -17,7 +17,7 @@ class Mesh{
     std::vector<texture> textures;
 
     Mesh(std::vector<Vertex> vertices,std::vector<unsigned int> indices,std::vector<texture> textures);
-    void draw(shader &shader,std::string &shaderName);
+    void draw(shader &shader,const std::string &shaderName);
     private:
     VAO vao;
     VBO vbo;
