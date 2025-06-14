@@ -7,8 +7,8 @@ struct Vertex{
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 Textcoords;
-    glm::vec3 tangent;
-    glm::vec3 bitangent;
+    //glm::vec3 tangent;
+    //glm::vec3 bitangent;
 };
 
 struct texture{

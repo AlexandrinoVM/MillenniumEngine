@@ -103,7 +103,7 @@ Mesh Model::processMesh(aiMesh *mesh,const aiScene *scene){
                                             aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }  
-    
+    std::cout << indices.data() << std::endl;
     return Mesh(vertices,indices,textures);
 }
 

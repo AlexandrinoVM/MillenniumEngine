@@ -145,10 +145,10 @@ unsigned int indices[] = {
     vao.unbidVAO();
 
     
-    glm::vec3 lightColor = glm::vec3(1.0f,1.0f,1.0f);
+    glm::vec3 lightColor = glm::vec3(1.0f);
 
     core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
-    Model mochila("../models/backpack/backpack.obj");
+    Model mochila("../models/teste/m2.glb");
     glm::vec3 lightPos = {0.5f,1.0f,-10.f};
     core.useProgram("model");
     //core.shaderConfig().setVec3("model","lightPos",lightPos);
@@ -156,7 +156,7 @@ unsigned int indices[] = {
     core.shaderConfig().setVec3("model","light.ambient", {1.0f, 0.5f, 0.31f});
     core.shaderConfig().setVec3("model","light.diffuse", {1.0f, 0.5f, 0.31f});
     core.shaderConfig().setVec3("model","light.specular", {0.5f, 0.5f, 0.5f});
-    core.shaderConfig().setFloat("model","light.shininess", 32.0f);
+    core.shaderConfig().setFloat("model","light.shininess", 0.1f);
     core.shaderConfig().stop();
 
     shader teste;
@@ -209,12 +209,11 @@ unsigned int indices[] = {
             glm::mat4 view = core.CameraConfigs().getCamera();
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0.5f,-1.0f,-10.f));
-            model = glm::scale(model, glm::vec3(1.f));
             model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
             core.shaderConfig().setMat4("model","model", model);
             core.shaderConfig().setMat4("model","projection",projection);
             core.shaderConfig().setMat4("model","view",view);
-            core.shaderConfig().setFloat("model", "light.shininess", 32.0f);
+            core.shaderConfig().setFloat("model", "light.shininess", 20.0f);
             glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
             core.shaderConfig().setVec3("model","camPos",camView);
             mochila.DrawModel(teste,"model");

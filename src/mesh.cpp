@@ -19,7 +19,6 @@ void Mesh::setupMeshi(){
     vao.VAOatribs(0,3,sizeof(Vertex),0);
     vao.VAOatribs(1,3,sizeof(Vertex),offsetof(Vertex,Normal));
     vao.VAOatribs(2,2,sizeof(Vertex),offsetof(Vertex,Textcoords));
-    vao.VAOatribs(2,2,sizeof(Vertex),offsetof(Vertex,Textcoords));
     ebo.bindEBO();
     ebo.setData(indices);
 
