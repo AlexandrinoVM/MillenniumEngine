@@ -7,7 +7,10 @@ out vec3 ourColor;
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
+uniform vec3 lightPos;
+uniform vec3 camPos;
 
+out vec3 viewPos;
 out vec3 Normal;
 out vec2 TextCoord;
 out vec3 FragPos;
@@ -19,4 +22,5 @@ void main() {
     ourColor = aColor;
     TextCoord = aTexCoord;
     Normal = aNormal;
+    viewPos = camPos;
 }

@@ -9,7 +9,7 @@
 #include <headers/texture.hpp>
 #include <headers/tranfomation.hpp>
 #include <headers/camera.hpp>
-
+#include <glm/gtc/matrix_inverse.hpp> 
 
 int main() {
     float vertices[] = {
@@ -143,16 +143,20 @@ unsigned int indices[] = {
     vao.unbidVAO();
 
     
-    glm::vec4 lightColor = glm::vec4(1.0f,1.0f,1.0f,1.0f);
+    glm::vec3 lightColor = glm::vec3(1.0f,1.0f,1.0f);
 
     core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
     core.useProgram("teste");
     core.shaderConfig().setVec3("teste","objectColor",{1.0f, 0.5f, 0.31f});
-    core.shaderConfig().setVec4("teste","lightColor",lightColor);
+    core.shaderConfig().setVec3("teste","lightColor",lightColor);
     //glm::vec3 lightPos = {1.2f,1.0f,-8.0f};
     glm::vec3 lightPos = {0.5f,1.0f,-10.f};
     core.shaderConfig().setVec3("teste","lightPos",lightPos);
     core.shaderConfig().setFloat("teste","ambientLight",0.1);
+    core.shaderConfig().setVec3("teste","material.ambient", {1.0f, 0.5f, 0.31f});
+    core.shaderConfig().setVec3("teste","material.diffuse", {1.0f, 0.5f, 0.31f});
+    core.shaderConfig().setVec3("teste","material.specular", {0.5f, 0.5f, 0.5f});
+    core.shaderConfig().setFloat("teste","material.shininess", 32.0f);
     core.shaderConfig().stop();
     
     VAO vao2;
@@ -165,7 +169,7 @@ unsigned int indices[] = {
     
     core.loadShaders("lightCube","../shaders/light.vert","../shaders/light.frag");
     core.useProgram("lightCube");
-    core.shaderConfig().setVec4("lightCube","lightColor",lightColor);
+    core.shaderConfig().setVec3("lightCube","lightColor",lightColor);
     core.shaderConfig().stop();
     float lastFrame = 0.0f;
     float angle = 0.0f;
@@ -192,6 +196,8 @@ unsigned int indices[] = {
         core.shaderConfig().setMat4("teste","model", model);
         core.shaderConfig().setMat4("teste","projection",projection);
         core.shaderConfig().setMat4("teste","view",view);
+        glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
+        core.shaderConfig().setVec3("teste","camPos",camView);
        
         
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);

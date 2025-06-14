@@ -2,9 +2,9 @@
 
 void mouseCalback(GLFWwindow *window, double xpos, double ypos);
 
-float lastX = 400, lastY = 300; // centro da tela (ajuste se necessário)
-float yaw = -90.0f;             // rotação em Y
-float pitch = 0.0f;             // rotação em X
+float lastX = 400, lastY = 300; 
+float yaw = -90.0f;             
+float pitch = 0.0f;             
 bool firstMouse = true;
 
 Camera *camera;
@@ -48,7 +48,6 @@ void mouseCalback(GLFWwindow *window, double xpos, double ypos){
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(-pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    std::cout << "x: " << direction.x << " y:" << direction.y <<" z:" << direction.z << std::endl;
     glm::vec3 newview = glm::normalize(direction);
     camera->setdirection(newview);
 }
@@ -98,11 +97,7 @@ void Renderer::processInput(){
             glfwSetCursorPosCallback(window,nullptr);
         }
     }
-
-
 }
-
-
 
 void Renderer::clear(){
     glEnable(GL_DEPTH_TEST);

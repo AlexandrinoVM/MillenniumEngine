@@ -9,7 +9,7 @@ struct Vertex{
     glm::vec2 Textcoords;
 };
 
-struct Texture{
+struct texture{
     unsigned int id;
     std::string type;
 };

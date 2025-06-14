@@ -11,8 +11,8 @@ void VAO::bindVAO(){
     glBindVertexArray(vao);
 }
 
-void VAO::bindVBO(unsigned int vao){
-    glBindBuffer(GL_ARRAY_BUFFER,vao);
+void VAO::bindVAO(unsigned int vao){
+    glBindVertexArray(vao);
 }
 
 

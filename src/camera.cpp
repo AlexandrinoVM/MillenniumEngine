@@ -1,5 +1,5 @@
 #include <headers/camera.hpp>
-
+#include <iostream>
 
 
 Camera::Camera(){
@@ -23,6 +23,7 @@ void Camera::moveBackward(){
 }
 
 void Camera::moveLeft(){
+
     cameraPos = cameraPos + cameraLeft * speed; 
     view= glm::lookAt(cameraPos,cameraPos + cameraTarget,cameraup);
 }
@@ -33,6 +34,10 @@ void Camera::moveRigth(){
 }
 
 void Camera::setdirection(glm::vec3 &direction){
-    cameraTarget =  direction;
+    glm::vec3 cameraRight = normalize(cross(cameraPos, cameraup));
+
     view= glm::lookAt(cameraPos,cameraPos + direction,cameraup);
+    cameraTarget =  direction;
+    cameraLeft = cameraRight;
+
 }
