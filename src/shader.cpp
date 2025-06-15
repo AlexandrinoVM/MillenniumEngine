@@ -92,6 +92,7 @@ void shader::crateProgram(const unsigned int vert,const unsigned int frag){
 
 
 void shader::setint(const std::string &nameProgram,const std::string &name,int value){
+    std::cout << "nome textura:" << name.c_str() << std::endl;
     glUniform1i(glGetUniformLocation(shaders[nameProgram],name.c_str()),value);
 }
 

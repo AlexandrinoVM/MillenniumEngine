@@ -18,6 +18,7 @@ class Core {
     void useProgram(const std::string &Shadername);
     shader& shaderConfig(){return Shader;};
     Camera& CameraConfigs() { return camera;};
+    Renderer& RendererConfigs() { return Render;};
     int getProgramId();
     GLFWwindow *getWindow(){return Window.getWindow();}
     public:

@@ -21,6 +21,11 @@ void VAO::unbidVAO(){
 }
 
 void VAO::VAOatribs(int location,int quantPos,int stride,int offset){
-    glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
-    glEnableVertexAttribArray(location); 
+    if(quantPos == 2){
+        glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex,Textcoords));
+        glEnableVertexAttribArray(location);
+    }else{
+        glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(location); 
+    }
 }

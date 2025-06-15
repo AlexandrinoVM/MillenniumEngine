@@ -81,6 +81,26 @@ void Renderer::processInput(){
         camera->moveRigth();
     }
 
+
+    //arrow keys
+    if(glfwGetKey(window,GLFW_KEY_UP) == GLFW_PRESS){
+        if(positions.y > -90.f ){
+            positions.y = positions.y + (-10.f);
+        }
+        
+    }
+     if(glfwGetKey(window,GLFW_KEY_DOWN) == GLFW_PRESS){
+        if(positions.y< 90.f ){
+            positions.y = positions.y + 10.f;
+        }
+    }
+     if(glfwGetKey(window,GLFW_KEY_LEFT) == GLFW_PRESS){
+        positions.x -=  10.f;
+    }
+     if(glfwGetKey(window,GLFW_KEY_RIGHT) == GLFW_PRESS){
+         positions.x +=  10.f;
+    }
+
     //mouse inputs
     if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
         mouseOnscreen = true;
