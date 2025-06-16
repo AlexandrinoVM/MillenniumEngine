@@ -11,7 +11,7 @@
 #include <headers/camera.hpp>
 #include <glm/gtc/matrix_inverse.hpp> 
 #include <headers/model.hpp>
-
+#include <headers/terrarian.hpp>
 
 int main() {
     float vertices[] = {
@@ -131,23 +131,26 @@ unsigned int indices[] = {
     t.loadTexture("../assets/linux-ico.jpg");
     unsigned int textura2 = t.generateTexture();
 
-    VAO vao;
-    VBO vbo1(floorVertices,sizeof(floorVertices));
-    vbo1.bindVBO();
-    vao.VAOatribs(0,3,8,0);
-    vao.VAOatribs(1,3,8,3);
-    vao.VAOatribs(2,2,8,6);
-    vbo1.unbidVBO();
-    //VBO vbocolor(colors,sizeof(colors));
-    //vao.VAOatribs(1,3,3,0);
-    //vbocolor.unbidVBO();
-    EBO ebo1(floorIndices,6);
-    vao.unbidVAO();
+    // VAO vao;
+    // VBO vbo1(floorVertices,sizeof(floorVertices));
+    // vbo1.bindVBO();
+    // vao.VAOatribs(0,3,8,0);
+    // vao.VAOatribs(1,3,8,3);
+    // vao.VAOatribs(2,2,8,6);
+    // vbo1.unbidVBO();
+    // //VBO vbocolor(colors,sizeof(colors));
+    // //vao.VAOatribs(1,3,3,0);
+    // //vbocolor.unbidVBO();
+    // EBO ebo1(floorIndices,6);
+    // vao.unbidVAO();
 
     
     glm::vec3 lightColor = glm::vec3(1.0f);
 
     core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
+    //Model mochila("../models/van/van/source/combi.glb");
+   // Model mochila("../models/gun/mp7.glb");
+    //Model mochila("../models/teste/m2.glb");
     Model mochila("../models/backpack/backpack.obj");
     glm::vec3 lightPos = {0.5f,1.0f,-10.f};
     core.useProgram("model");
@@ -158,6 +161,13 @@ unsigned int indices[] = {
     core.shaderConfig().setVec3("model","light.specular", {0.5f, 0.5f, 0.5f});
     core.shaderConfig().setFloat("model","light.shininess", 0.1f);
     core.shaderConfig().stop();
+
+
+    core.loadShaders("terrarian","../shaders/terrarian.vert","../shaders/terrarian.frag");
+    Terrarian terrarian;
+
+
+
 
     shader teste;
 
@@ -203,10 +213,31 @@ unsigned int indices[] = {
     //     vao.bindVAO();
     //     t.activeText(GL_TEXTURE0);
     //     t.bindTexture(textura1);
+
+            core.useProgram("terrarian");
+
+            glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.01f,1000.0f);
+            glm::mat4 view = core.CameraConfigs().getCamera();
+            glm::mat4 model2 = glm::mat4(1.0f);
+
+            model2 = glm::translate(model2, glm::vec3(0.0f,-5.0f,20.0f));
+            //model2 = glm::rotate(model2, glm::radians(10.f),core.RendererConfigs().getPositions());
+            core.shaderConfig().setMat4("terrarian","model", model2);
+            core.shaderConfig().setMat4("terrarian","projection",projection);
+            core.shaderConfig().setMat4("terrarian","view",view);
+    
+            terrarian.draw(teste);
+
+
+            core.shaderConfig().stop();
+
+
+
+
             core.useProgram("model");
             
-            glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
-            glm::mat4 view = core.CameraConfigs().getCamera();
+            //glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
+            //glm::mat4 view = core.CameraConfigs().getCamera();
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0.5f,-1.0f,-10.f));
             model = glm::rotate(model, glm::radians(10.f),core.RendererConfigs().getPositions());
@@ -218,6 +249,7 @@ unsigned int indices[] = {
             core.shaderConfig().setVec3("model","camPos",camView);
             mochila.DrawModel(teste,"model");
        
+            core.shaderConfig().stop();
         
     //     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
     //     core.shaderConfig().stop();
@@ -245,7 +277,7 @@ unsigned int indices[] = {
         
         
     }
-    vao.unbidVAO();
+    //vao.unbidVAO();
     core.close();
     return 0;
 }

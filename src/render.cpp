@@ -1,6 +1,8 @@
 #include "../include/headers/render.hpp"
-
+#include <thread>
+#include <chrono>
 void mouseCalback(GLFWwindow *window, double xpos, double ypos);
+void scrollCalbakc(GLFWwindow* window, double xoffset, double yoffset);
 
 float lastX = 400, lastY = 300; 
 float yaw = -90.0f;             
@@ -22,6 +24,11 @@ void Renderer::init(GLFWwindow *win,Camera *cam){
     glClearColor(0,0,0,0);
 }
 
+double initialPos = 0;
+
+void scrollCalbakc(GLFWwindow* window, double xoffset, double yoffset){
+    camera->scrollMouse(yoffset);
+}
 
 void mouseCalback(GLFWwindow *window, double xpos, double ypos){
     
@@ -66,9 +73,14 @@ void Renderer::processInput(){
             std::cout << count << std::endl;
             count = 0;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     } 
+
+
+    glfwSetScrollCallback(window,scrollCalbakc);
+
     //WSDA keys actioin
-    if(glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS){
+    if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS){
         camera->moveFoward();
     }
      if(glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS){

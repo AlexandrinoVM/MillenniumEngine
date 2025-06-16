@@ -18,6 +18,7 @@ class Camera{
     void setdirection(glm::vec3 &Direction);
     bool firstclick(){return firstclicks;};
     void setClick(){firstclicks = !firstclicks;};
+    void scrollMouse(double ypos);
     private:
     glm::vec3 cameraPos;
     glm::vec3 cameraTarget;
@@ -27,5 +28,5 @@ class Camera{
     bool firstclicks = true;
     float pitch = 0.f;
     float yaw = -90.f;
-    float speed = 0.5f;
+    float speed = 1.0f;
 };

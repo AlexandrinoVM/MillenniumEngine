@@ -12,6 +12,14 @@ Camera::Camera(){
     //glUniformMatrix4fv(glGetUniformLocation(id,"view"),1,GL_FALSE,glm::value_ptr(view));
 }
 
+void Camera::scrollMouse(double ypos){
+    if(ypos < 0){
+        moveBackward();
+    }else if(ypos > 0){
+        moveFoward();
+    }
+}
+
 void Camera::moveFoward(){
     cameraPos = cameraPos + cameraTarget * speed;
     view= glm::lookAt(cameraPos,cameraPos + cameraTarget,cameraup);

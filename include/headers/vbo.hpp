@@ -14,7 +14,7 @@ class VBO{
     void bindVBO(unsigned int VBO);
     void unbidVBO();
     void destroyVBO();
-    void setData(glm::vec3 *data,size_t size);
+    void setData(std::vector<float>data);
     unsigned int getVBO(){return vbo;};
     private:
     unsigned int vbo;
