@@ -114,21 +114,21 @@ void Renderer::processInput(){
     }
 
     //mouse inputs
-    if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
-        mouseOnscreen = true;
-        glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
-        if(mouseOnscreen){
-            glfwSetCursorPosCallback(window,mouseCalback);
-        }
-        mouseOnscreen = false;
+    // if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS){
+    //     mouseOnscreen = true;
+    //     glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
+    //     if(mouseOnscreen){
+    //         glfwSetCursorPosCallback(window,mouseCalback);
+    //     }
+    //     mouseOnscreen = false;
         
-    }else {
-        if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE){
-            mouseOnscreen = false;
-            glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
-            glfwSetCursorPosCallback(window,nullptr);
-        }
-    }
+    // }else {
+    //     if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE){
+    //         mouseOnscreen = false;
+    //         glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_NORMAL);
+    //         glfwSetCursorPosCallback(window,nullptr);
+    //     }
+    // }
 }
 
 void Renderer::clear(){

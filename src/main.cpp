@@ -13,6 +13,11 @@
 #include <headers/model.hpp>
 #include <headers/terrarian.hpp>
 
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 int main() {
     float vertices[] = {
     // Frente (+Z)
@@ -200,6 +205,19 @@ unsigned int indices[] = {
     float lastFrame = 0.0f;
     float angle = 0.0f;
     int count =0; 
+
+    const char* glsl_version = "#version 330";
+    
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(core.getWindow(), true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+    float scale = 1.f;
+    float rotation = 45.f;
+    glm::vec3 rotatexy = glm::vec3(1.f);
+
     while(core.isrunning()){
         
         core.clear();
@@ -213,6 +231,9 @@ unsigned int indices[] = {
     //     vao.bindVAO();
     //     t.activeText(GL_TEXTURE0);
     //     t.bindTexture(textura1);
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
             core.useProgram("terrarian");
 
@@ -228,19 +249,17 @@ unsigned int indices[] = {
     
             terrarian.draw(teste);
 
-
+            
             core.shaderConfig().stop();
-
-
-
 
             core.useProgram("model");
             
             //glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
             //glm::mat4 view = core.CameraConfigs().getCamera();
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0.5f,-1.0f,-10.f));
-            model = glm::rotate(model, glm::radians(10.f),core.RendererConfigs().getPositions());
+            model = glm::translate(model, glm::vec3((float)rotatexy.x,(float)rotatexy.y,-10.f));
+            model = glm::scale(model,glm::vec3(scale));
+            model = glm::rotate(model, glm::radians(rotation),core.RendererConfigs().getPositions());
             core.shaderConfig().setMat4("model","model", model);
             core.shaderConfig().setMat4("model","projection",projection);
             core.shaderConfig().setMat4("model","view",view);
@@ -251,6 +270,19 @@ unsigned int indices[] = {
        
             core.shaderConfig().stop();
         
+
+
+
+            ImGui::Begin("Janela Teste");
+            ImGui::Text("Funcionando!");
+            ImGui::SliderFloat("Scale",&scale,0.5f,10.0f);
+            ImGui::SliderFloat("rotation",&rotation,-90.f,90.0f);
+            ImGui::SliderFloat("rotation x",&rotatexy.x,-90.f,90.0f);
+            ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
+            ImGui::End();
+            ImGui::Render();
+
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     //     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
     //     core.shaderConfig().stop();
     //     vao.unbidVAO();
@@ -277,6 +309,9 @@ unsigned int indices[] = {
         
         
     }
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     //vao.unbidVAO();
     core.close();
     return 0;
