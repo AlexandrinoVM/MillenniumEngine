@@ -14,7 +14,6 @@ EBO::EBO(unsigned int *indices,int count){
 }
 
 void EBO::setData(std::vector<unsigned int>indices){
-    glGenBuffers(1,&ebo);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
 

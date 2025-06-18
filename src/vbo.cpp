@@ -34,7 +34,6 @@ void VBO::unbidVBO(){
 }
 
 void VBO::setData(std::vector<float> data){
-    glGenBuffers(1,&vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
 

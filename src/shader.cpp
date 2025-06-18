@@ -105,6 +105,12 @@ void shader::setFloat(const std::string &nameProgram,const std::string &name,flo
 
 
 void shader::setMat4(const std::string &nameProgram,const std::string &name,glm::mat4 data){
+    GLint location = glGetUniformLocation(shaders[nameProgram], name.c_str());
+    if (location == -1) {
+    std::cerr << "Warning: uniform '" << name << "' não encontrada no programa '" << nameProgram << "'\n";
+    return;
+}
+
     glUniformMatrix4fv(glGetUniformLocation(shaders[nameProgram],name.c_str()),1,GL_FALSE,glm::value_ptr(data));
 }
 

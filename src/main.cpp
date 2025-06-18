@@ -18,6 +18,9 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
+
+#include <headers/cube.hpp>
+
 int main() {
     float vertices[] = {
     // Frente (+Z)
@@ -136,6 +139,9 @@ unsigned int indices[] = {
     t.loadTexture("../assets/linux-ico.jpg");
     unsigned int textura2 = t.generateTexture();
 
+
+    
+    
     // VAO vao;
     // VBO vbo1(floorVertices,sizeof(floorVertices));
     // vbo1.bindVBO();
@@ -148,13 +154,14 @@ unsigned int indices[] = {
     // //vbocolor.unbidVBO();
     // EBO ebo1(floorIndices,6);
     // vao.unbidVAO();
-
+    
     
     glm::vec3 lightColor = glm::vec3(1.0f);
-
+    
+   
     core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
     //Model mochila("../models/van/van/source/combi.glb");
-   // Model mochila("../models/gun/mp7.glb");
+    // Model mochila("../models/gun/mp7.glb");
     //Model mochila("../models/teste/m2.glb");
     Model mochila("../models/backpack/backpack.obj");
     glm::vec3 lightPos = {0.5f,1.0f,-10.f};
@@ -175,6 +182,7 @@ unsigned int indices[] = {
 
 
     shader teste;
+    shader c;
 
     // core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
     // core.useProgram("teste");
@@ -218,6 +226,11 @@ unsigned int indices[] = {
     float rotation = 45.f;
     glm::vec3 rotatexy = glm::vec3(1.f);
 
+
+    Cube cube;
+    core.loadShaders("teste","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
+   
+
     while(core.isrunning()){
         
         core.clear();
@@ -252,63 +265,56 @@ unsigned int indices[] = {
             
             core.shaderConfig().stop();
 
-            core.useProgram("model");
-            
-            //glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.1f,100.0f);
-            //glm::mat4 view = core.CameraConfigs().getCamera();
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3((float)rotatexy.x,(float)rotatexy.y,-10.f));
-            model = glm::scale(model,glm::vec3(scale));
-            model = glm::rotate(model, glm::radians(rotation),core.RendererConfigs().getPositions());
-            core.shaderConfig().setMat4("model","model", model);
-            core.shaderConfig().setMat4("model","projection",projection);
-            core.shaderConfig().setMat4("model","view",view);
-            core.shaderConfig().setFloat("model", "light.shininess", 20.0f);
-            glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
-            core.shaderConfig().setVec3("model","camPos",camView);
-            mochila.DrawModel(teste,"model");
+            // core.useProgram("model");
        
-            core.shaderConfig().stop();
+            // glm::mat4 model = glm::mat4(1.0f);
+            // model = glm::translate(model, glm::vec3((float)rotatexy.x,(float)rotatexy.y,-10.f));
+            // model = glm::scale(model,glm::vec3(scale));
+            // model = glm::rotate(model, glm::radians(rotation),core.RendererConfigs().getPositions());
+            // core.shaderConfig().setMat4("model","model", model);
+            // core.shaderConfig().setMat4("model","projection",projection);
+            // core.shaderConfig().setMat4("model","view",view);
+            // core.shaderConfig().setFloat("model", "light.shininess", 20.0f);
+            // glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
+            // core.shaderConfig().setVec3("model","camPos",camView);
+            // mochila.DrawModel(teste,"model");
+       
+            // core.shaderConfig().stop();
         
-
-
-
+            
+            
+            core.useProgram("teste");
             ImGui::Begin("Janela Teste");
             ImGui::Text("Funcionando!");
             ImGui::SliderFloat("Scale",&scale,0.5f,10.0f);
             ImGui::SliderFloat("rotation",&rotation,-90.f,90.0f);
             ImGui::SliderFloat("rotation x",&rotatexy.x,-90.f,90.0f);
             ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
+            if(ImGui::Button("cube x")){
+                cube.createCubes('x');
+                std::cout << cube.getSize() << std::endl;
+            }
+            if(ImGui::Button("cube y")){
+                cube.createCubes('y');
+                
+            }
+            if(ImGui::Button("cube z")){
+                cube.createCubes('z');
+                
+            }
+
+            cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
             ImGui::End();
             ImGui::Render();
-
+            core.shaderConfig().stop();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    //     glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-    //     core.shaderConfig().stop();
-    //     vao.unbidVAO();
-
-    //     //segundo cubo
-    //     core.useProgram("lightCube");
-    //     vao2.bindVAO();
-
-    //     glm::mat4 model2 = glm::mat4(1.0f);
-    //     model2 = glm::translate(model2, glm::vec3(0.5f,1.0f,-10.f));
-    //     model2 = glm::scale(model2, glm::vec3(0.5f));
-    //    // model2 = glm::rotate(model2, glm::radians(1.0f), glm::vec3(1.0f, 0.3f, 0.5f));
-
-        // core.shaderConfig().setMat4("lightCube","model", model2);
-        // core.shaderConfig().setMat4("lightCube","projection", projection);
-        // core.shaderConfig().setMat4("lightCube","view", view);
-       
-        // glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT,0);
-        // core.shaderConfig().stop();
-        // vbo2.unbidVBO();
        
         core.run();
            
         
         
     }
+    cube.clearCubes();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
