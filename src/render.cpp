@@ -59,6 +59,17 @@ void mouseCalback(GLFWwindow *window, double xpos, double ypos){
     camera->setdirection(newview);
 }
 
+void Renderer::wiredMode(bool active){
+        if(active){
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            std::cout << count << std::endl;
+        }else{
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            std::cout << count << std::endl;
+        }
+    
+}
+
 void Renderer::processInput(){
     if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS){
         running = false;

@@ -9,10 +9,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "shaders.hpp"
 #include <string>
-
+#include <algorithm>
 class Cube{
     public:
-    std::vector<glm::vec3> cubePositions;
     Cube(){setupBuffers(); cubePositions.push_back(glm::vec3(-0.5f, 0.0f, -15.0f));};
     void createCubes(char x);
     int getSize(){return cubCount;};
@@ -21,8 +20,19 @@ class Cube{
     void setupBuffers();
     private:
     void setupPositions();
+    void removeLayery(std::vector<glm::vec3> &cubepositions,int &layerY);
     unsigned int cubCount;
-
+    std::vector<glm::vec3> cubePositions;
+    std::vector<glm::vec3>newPositions;
+    std::vector<glm::vec3>lastPositionx;
+    std::vector<glm::vec3>lastPositiony;
+    std::vector<glm::vec3>lastPositionz;
+    std::vector<glm::vec3>lastPositionxx;
+   
+        
+    int layerY = 0;
+    
+    
     VAO vao;
     VBO vbo;
     EBO ebo;

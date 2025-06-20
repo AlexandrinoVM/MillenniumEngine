@@ -230,7 +230,7 @@ unsigned int indices[] = {
     Cube cube;
     core.loadShaders("teste","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
    
-
+    bool wiredActivate = false;
     while(core.isrunning()){
         
         core.clear();
@@ -292,7 +292,6 @@ unsigned int indices[] = {
             ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
             if(ImGui::Button("cube x")){
                 cube.createCubes('x');
-                std::cout << cube.getSize() << std::endl;
             }
             if(ImGui::Button("cube y")){
                 cube.createCubes('y');
@@ -301,6 +300,13 @@ unsigned int indices[] = {
             if(ImGui::Button("cube z")){
                 cube.createCubes('z');
                 
+            }
+            if(ImGui::Button("<")){
+                cube.createCubes('<');
+                
+            }
+            if(ImGui::Checkbox("wiredMode",&wiredActivate)){
+                core.RendererConfigs().wiredMode(wiredActivate);
             }
 
             cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());

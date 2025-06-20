@@ -1,5 +1,7 @@
 #include <headers/cube.hpp>
 
+void printY(std::vector<glm::vec3> lastPositiony,glm::vec3 offset,std::vector<glm::vec3> cubePositions);
+
 
 void Cube::setupBuffers(){
     vao.bindVAO();
@@ -34,27 +36,143 @@ void Cube::draw(shader &Shader,const std::string &nameshader,glm::mat4 view){
     vao.unbidVAO();
 }
 
+
+
 void Cube::createCubes(char x){
     glm::vec3 lastPos(0.f);
-
-    if (cubePositions.empty()) {
-        cubePositions.push_back(lastPos);
-        cubCount = 1; // inicializa contador
-        return;
-    }
-    lastPos = cubePositions.back();
-
+   
     glm::vec3 offset(0.f);
-
+     int tsize = lastPositiony.size();
     switch (x)
     {
-    case 'x': offset = glm::vec3(1.0f, 0.0f, -3.0f); break;
-    case 'y': offset = glm::vec3(0.0f, 1.0f, -3.0f); break;
-    case 'z': offset = glm::vec3(0.0f, 0.0f, -3.5f); break;
-    default: return; 
+    case 'x':{ 
+    offset = glm::vec3(1.0f, 0.0f, 0.0f); 
+     if(cubePositions.size() == 0 || cubePositions.size() <= 1){
+        glm::vec3 cross = cubePositions.back() + offset;
+            newPositions.push_back(cubePositions.back());
+            newPositions.push_back(cross);
+            cubCount++;
+    }
+    else{
+
+        for(const auto&pos : cubePositions){
+            glm::vec3 cross = pos+ offset;
+            if(std::find(cubePositions.begin(),cubePositions.end(), cross) != cubePositions.end()){
+                continue;
+            }else{
+                lastPositionxx.push_back(cross);
+                newPositions.push_back(cross);
+                cubCount++;
+            }
+            
+        }
+        
+    }
+    break;
+}
+    case 'y':{ 
+    offset = glm::vec3(0.0f, 1.f, 0.0f); 
+    lastPositiony.clear();
+      if(cubePositions.size() <= 1){
+        glm::vec3 cross = cubePositions.back() + offset;
+            newPositions.push_back(cubePositions.back());
+            newPositions.push_back(cross);
+            lastPositiony.push_back(cross);
+            cubCount++;
+            layerY++;
+            break;
+    }else{
+        for(const auto&pos :cubePositions){
+            glm::vec3 cross = pos+ offset;
+            if(std::find(cubePositions.begin(),cubePositions.end(), cross) != cubePositions.end()){
+                cubCount++;
+            }else{
+                lastPositiony.push_back(cross);
+                newPositions.push_back(cross);
+                continue;
+    
+            }
+       }    
+       layerY++;   
+    }
+    break;
+}
+    
+    case 'z': {
+    offset = glm::vec3(0.0f, 0.0f, -0.5f); 
+     if(cubePositions.size() == 0 || cubePositions.size() <= 1){
+        glm::vec3 cross = cubePositions.back() + offset;
+            newPositions.push_back(cubePositions.back());
+            newPositions.push_back(cross);
+            cubCount++;
+    }
+    else{
+        for(const auto&pos : cubePositions){
+            glm::vec3 cross = pos+ offset;
+            if(std::find(cubePositions.begin(),cubePositions.end(), cross) != cubePositions.end()){
+                continue;
+            }else{
+                lastPositionz.push_back(cross);
+                newPositions.push_back(cross);
+                cubCount++;
+            }
+        }
+
     }
 
-    cubePositions.push_back(lastPos + offset);
-    std::cout << cubePositions.size() << std::endl;
-    cubCount++;
+    break;
+}
+
+    case '<':{
+
+    // std::vector<glm::vec3> newY;
+    // offset = glm::vec3(0.0f, 1.f, 0.0f); 
+    // for(const auto&pos : lastPositiony){
+    //     glm::vec3 originalPOs = offset-pos;
+    //     auto it = std::find(cubePositions.begin(), cubePositions.end(), pos);
+    //     if(it != cubePositions.end()){
+    //         glm::vec3 cross = offset-pos ;
+    //         cubePositions.erase(it);
+    //         newY.push_back(cross);
+    //         cubCount++;
+    //     }
+    // }
+    // lastPositiony= std::move(newY);
+    // printY(lastPositiony,offset,cubePositions);
+    // newY.clear();
+    removeLayery(cubePositions,layerY);
+    break;
+}
+    default: return; 
+}
+    cubePositions.insert(cubePositions.end(),newPositions.begin(),newPositions.end());
+    lastPositionx.insert(lastPositionx.begin(),newPositions.begin(),newPositions.end());
+    newPositions.clear();
+    //cubePositions.push_back(lastPos + offset);
+    //std::cout << cubePositions.size() << std::endl;
+    
+}
+
+void printY(std::vector<glm::vec3> lastPositiony,glm::vec3 offset,std::vector<glm::vec3> cubePositions){
+    for(unsigned int i = 0 ;i< lastPositiony.size()  ;i++){
+        std::cout << "x:"<<lastPositiony[i].x << " y:" <<lastPositiony[i].y << " z:" << lastPositiony[i].z  << std::endl;
+    }
+       
+} 
+
+void Cube::removeLayery(std::vector<glm::vec3> &cubepositions,int &layerY){
+    float layersize = 1.f*layerY;
+      auto isSameY = [](float a, float b) {
+        return std::fabs(a - b) < 0.0001f;
+    };
+    
+    cubePositions.erase(
+        std::remove_if(cubePositions.begin(), cubePositions.end(),
+            [layersize, isSameY](const glm::vec3 &pos) {
+                return isSameY(pos.y, layersize);
+            }
+        ),
+        cubePositions.end()
+    );
+    layerY--;
 }

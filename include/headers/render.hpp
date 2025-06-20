@@ -12,7 +12,7 @@ class Renderer{
 
     bool isRunning(){return running;}
     void init(GLFWwindow*win,Camera *cam);
-    
+    void wiredMode(bool active);
     void events();
     void processInput();
     void RenderWindow();
