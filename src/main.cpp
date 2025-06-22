@@ -13,6 +13,9 @@
 #include <headers/model.hpp>
 #include <headers/terrarian.hpp>
 
+#include <headers/objModel.hpp>
+
+#include <headers/gui.hpp>
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
@@ -133,28 +136,6 @@ unsigned int indices[] = {
     Core core;
     core.init("janela",800,600);
 
-    Texture t;
-    t.loadTexture("../assets/floor.jpg");
-    unsigned int textura1 = t.generateTexture();
-    t.loadTexture("../assets/linux-ico.jpg");
-    unsigned int textura2 = t.generateTexture();
-
-
-    
-    
-    // VAO vao;
-    // VBO vbo1(floorVertices,sizeof(floorVertices));
-    // vbo1.bindVBO();
-    // vao.VAOatribs(0,3,8,0);
-    // vao.VAOatribs(1,3,8,3);
-    // vao.VAOatribs(2,2,8,6);
-    // vbo1.unbidVBO();
-    // //VBO vbocolor(colors,sizeof(colors));
-    // //vao.VAOatribs(1,3,3,0);
-    // //vbocolor.unbidVBO();
-    // EBO ebo1(floorIndices,6);
-    // vao.unbidVAO();
-    
     
     glm::vec3 lightColor = glm::vec3(1.0f);
     
@@ -216,21 +197,28 @@ unsigned int indices[] = {
 
     const char* glsl_version = "#version 330";
     
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(core.getWindow(), true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    // IMGUI_CHECKVERSION();
+    // ImGui::CreateContext();
+    // ImGuiIO& io = ImGui::GetIO(); (void)io;
+    // ImGui::StyleColorsDark();
+    // ImGui_ImplGlfw_InitForOpenGL(core.getWindow(), true);
+    // ImGui_ImplOpenGL3_Init(glsl_version);
     float scale = 1.f;
     float rotation = 45.f;
     glm::vec3 rotatexy = glm::vec3(1.f);
 
-
+    GUI janela("#version 330", core.getWindow());
+    
     Cube cube;
     core.loadShaders("teste","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
-   
+    core.loadShaders("newObjtModel","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
+    ObjModel obj;
+    //obj.atrrib("/home/vxsh/Documentos/models/Untitled.obj");
+    obj.atrrib("/home/vxsh/Documentos/models/choco.obj");
+    obj.setup();
+    obj.print();
     bool wiredActivate = false;
+    bool drawCubes = false;
     while(core.isrunning()){
         
         core.clear();
@@ -244,10 +232,11 @@ unsigned int indices[] = {
     //     vao.bindVAO();
     //     t.activeText(GL_TEXTURE0);
     //     t.bindTexture(textura1);
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
+            // ImGui_ImplOpenGL3_NewFrame();
+            // ImGui_ImplGlfw_NewFrame();
+            // ImGui::NewFrame();
 
+            janela.newFrame();
             core.useProgram("terrarian");
 
             glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.01f,1000.0f);
@@ -280,40 +269,57 @@ unsigned int indices[] = {
             // mochila.DrawModel(teste,"model");
        
             // core.shaderConfig().stop();
-        
+            core.useProgram("newObjtModel");
+            obj.draw(core.shaderConfig(),"newObjtModel",core.CameraConfigs().getCamera());
             
-            
-            core.useProgram("teste");
-            ImGui::Begin("Janela Teste");
-            ImGui::Text("Funcionando!");
-            ImGui::SliderFloat("Scale",&scale,0.5f,10.0f);
-            ImGui::SliderFloat("rotation",&rotation,-90.f,90.0f);
-            ImGui::SliderFloat("rotation x",&rotatexy.x,-90.f,90.0f);
-            ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
-            if(ImGui::Button("cube x")){
-                cube.createCubes('x');
-            }
-            if(ImGui::Button("cube y")){
-                cube.createCubes('y');
-                
-            }
-            if(ImGui::Button("cube z")){
-                cube.createCubes('z');
-                
-            }
-            if(ImGui::Button("<")){
-                cube.createCubes('<');
-                
-            }
-            if(ImGui::Checkbox("wiredMode",&wiredActivate)){
-                core.RendererConfigs().wiredMode(wiredActivate);
-            }
-
-            cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
-            ImGui::End();
-            ImGui::Render();
             core.shaderConfig().stop();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            janela.showDemo();
+            core.useProgram("teste");
+            janela.inteface();
+            // ImGui::Begin("Janela Teste");
+            // ImGui::Text("Funcionando!");
+            // ImGui::SliderFloat("Scale",&scale,0.5f,10.0f);
+            // ImGui::SliderFloat("rotation",&rotation,-90.f,90.0f);
+            // ImGui::SliderFloat("rotation x",&rotatexy.x,-90.f,90.0f);
+            // ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
+            janela.Button("cube x",'x', [&](char c){ cube.createCubes(c);});
+            janela.Button("cube y",'y',[&](char c){ cube.createCubes(c);});
+            janela.Button("cube z",'z',[&](char c){ cube.createCubes(c);});
+            janela.Button("cube <",'<',[&](char c){ cube.createCubes(c);});
+            // if(ImGui::Button("cube x")){
+            //     cube.createCubes('x');
+            // }
+            // if(ImGui::Button("cube y")){
+            //     cube.createCubes('y');
+                
+            // }
+            // if(ImGui::Button("cube z")){
+            //     cube.createCubes('z');
+                
+            // }
+            // if(ImGui::Button("<")){
+            //     cube.createCubes('<');
+                
+            // }
+
+            janela.CheckBox("wiredMode",wiredActivate,[&](bool newvalue){core.RendererConfigs().wiredMode(newvalue);});
+           // janela.slideObject("model position",obj.getPosition());
+            janela.CheckBox("showAnotherWindow",janela.getAnotherwindow(),obj.getPosition());
+            //janela.CheckBox("draw",&drawCubes,core.RendererConfigs().wiredMode);
+            cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
+
+            // if(ImGui::Checkbox("wiredMode",&wiredActivate)){
+            //     core.RendererConfigs().wiredMode(wiredActivate);
+            // }
+            // if(ImGui::Checkbox("draw",&drawCubes)){
+            // }
+            
+
+            //ImGui::End();
+            //ImGui::Render();
+            core.shaderConfig().stop();
+            janela.close();
+            //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
        
         core.run();
            

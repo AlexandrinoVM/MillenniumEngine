@@ -26,6 +26,8 @@ add_executable(MillenniumEngine src/main.cpp
                                 src/shader.cpp 
                                 src/glad.c
                                 src/cube.cpp
+                                src/objModel.cpp
+                                src/gui.cpp
                                 ${IAMGUI_SRC})
 
 

@@ -10,6 +10,7 @@ class VBO{
     VBO();
     VBO(float *data,size_t size);
     void setData(std::vector<Vertex> indices);
+    void setData(std::vector<glm::vec3> indices);
     void bindVBO();
     void bindVBO(unsigned int VBO);
     void unbidVBO();

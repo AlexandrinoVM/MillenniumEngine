@@ -21,6 +21,15 @@ void EBO::setData(std::vector<unsigned int>indices){
 
 }
 
+void EBO::setData(std::vector<glm::vec3>indices){
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(glm::vec3),indices.data(),GL_STATIC_DRAW);
+
+}
+
+
 
 void EBO::bindEBO(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);

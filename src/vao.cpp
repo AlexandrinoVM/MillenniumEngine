@@ -29,3 +29,10 @@ void VAO::VAOatribs(int location,int quantPos,int stride,int offset){
         glEnableVertexAttribArray(location); 
     }
 }
+
+void VAO::VAOatribs(int location,int quantPos,int stride,int offset,int type){
+    if(type != 0){
+         glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)(offset * sizeof(float)));
+        glEnableVertexAttribArray(location); 
+    }
+}

@@ -39,3 +39,10 @@ void VBO::setData(std::vector<float> data){
 
     glBufferData(GL_ARRAY_BUFFER,data.size() *sizeof(float),data.data(),GL_STATIC_DRAW);
 }
+
+void VBO::setData(std::vector<glm::vec3> data){
+
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+
+    glBufferData(GL_ARRAY_BUFFER,data.size() *sizeof(glm::vec3),data.data(),GL_STATIC_DRAW);
+}
