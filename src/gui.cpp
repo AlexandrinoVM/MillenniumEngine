@@ -58,7 +58,7 @@ void GUI::showAnotherwindow(glm::vec3 &data){
 }
 
 void GUI::slideObject(glm::vec3 &data){
-   ImGui::SliderFloat("x",&data.x,-60.f,60.f,"%.3f",0);
+   ImGui::SliderFloat("x",&data.x,-5.f,10.f,"%.3f",0);
    ImGui::SliderFloat("y",&data.y,-60.f,60.f,"%.3f",0);
    ImGui::SliderFloat("z",&data.z,-60.f,60.f,"%.3f",0);
 

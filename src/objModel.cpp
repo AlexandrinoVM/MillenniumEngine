@@ -86,6 +86,10 @@ void ObjModel::atrrib(const char*filename,const char* mode){
         vertices.push_back(vert);
     }
 
+    for(const auto&vert : temp_Vertices){
+        Normals.push_back(vert);
+    }
+
      for( unsigned int i=0; i<vertexIndices.size(); i++ ){
         indices.push_back(vertexIndices[i] -1);
     }
@@ -95,14 +99,14 @@ void ObjModel::atrrib(const char*filename,const char* mode){
         glm::vec2 uv = temp_texts[uvIndex - 1];
         textures.push_back(uv);
     }
+    
+   
 
-
-
-    for( unsigned int i=0;i<normalIndices.size(); i++ ){
-        unsigned int normalIndice =normalIndices[i];
-        glm::vec3 vertex = temp_Vertices[normalIndice -1];
-        Normals.push_back(vertex);
-    }
+    // for( unsigned int i=0;i<normalIndices.size(); i++ ){
+    //     unsigned int normalIndice =normalIndices[i];
+    //     glm::vec3 vertex = temp_Vertices[normalIndice -1];
+    //     Normals.push_back(vertex);
+    // }
 
     //vertices.insert(vertices.begin(),temp_Vertices.begin(),temp_Vertices.end());
     //indices.insert(indices.begin(),vertexIndices.begin(),vertexIndices.end());
@@ -142,6 +146,8 @@ void ObjModel::setup(){
     ebo.bindEBO();
     vbo.setData(vertices);
     vao.VAOatribs(0,3,sizeof(glm::vec3),0);
+    vbo.setData(Normals);
+    vao.VAOatribs(1,3,sizeof(glm::vec3),0);
     ebo.setData(indices);
     std::cout<< "vertices:"<< vertices.size()<<  std::endl;
     std::cout<< "indices:"<< indices.size()<<  std::endl;

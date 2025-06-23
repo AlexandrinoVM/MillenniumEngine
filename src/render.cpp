@@ -21,7 +21,7 @@ void Renderer::init(GLFWwindow *win,Camera *cam){
     window = win;
     camera = cam;
     running = true;
-    glClearColor(0,0,0,0);
+    glClearColor(0.4, 0.39, 0.39,0.f);
 }
 
 double initialPos = 0;

@@ -214,7 +214,7 @@ unsigned int indices[] = {
     core.loadShaders("newObjtModel","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
     ObjModel obj;
     //obj.atrrib("/home/vxsh/Documentos/models/Untitled.obj");
-    obj.atrrib("/home/vxsh/Documentos/models/choco.obj");
+    obj.atrrib("../models/monkey/suzanne.obj");
     obj.setup();
     obj.print();
     bool wiredActivate = false;
@@ -306,7 +306,7 @@ unsigned int indices[] = {
            // janela.slideObject("model position",obj.getPosition());
             janela.CheckBox("showAnotherWindow",janela.getAnotherwindow(),obj.getPosition());
             //janela.CheckBox("draw",&drawCubes,core.RendererConfigs().wiredMode);
-            cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
+            //cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
 
             // if(ImGui::Checkbox("wiredMode",&wiredActivate)){
             //     core.RendererConfigs().wiredMode(wiredActivate);
