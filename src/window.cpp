@@ -32,6 +32,7 @@ void window::init(const char*text,int w,int h){
     }
     //function to adjust viewport on hyprland because the manegement window system can adjust de window making the objets out of center
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSwapInterval(0);
 };
 
 void window::close(){

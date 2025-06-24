@@ -15,7 +15,7 @@ void Model::loadModel(std::string Path){
     //create a scene usind the import to read the file in the path
     const aiScene *scene = import.ReadFile(Path,aiProcess_Triangulate | aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
-        std::cout <<"ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+        std::cout <<"ERROR::ASSIMP::" << import.GetErrorString() << '\n';
         return;
     }
     //getting the directory path
@@ -24,9 +24,9 @@ void Model::loadModel(std::string Path){
 
     
     processNode(scene->mRootNode,scene);
-    std::cout << "Scene has " << scene->mNumMeshes << " total meshes." << std::endl;
-    std::cout << "Root node has " << scene->mRootNode->mNumChildren << " children." << std::endl;
-    std::cout << meshes.data() << std::endl;
+    std::cout << "Scene has " << scene->mNumMeshes << " total meshes." << '\n';
+    std::cout << "Root node has " << scene->mRootNode->mNumChildren << " children." << '\n';
+    std::cout << meshes.data() << '\n';
 
 }
 
@@ -133,7 +133,7 @@ std::vector<texture> Model::loadMaterialTextures(aiMaterial *mat,aiTextureType t
             texture.path = str.C_Str();
             textures.push_back(texture);
             textures_loaded.push_back(texture); 
-            std::cout << "Loaded texture: " << texture.path << ", id: " << texture.id << std::endl;
+            std::cout << "Loaded texture: " << texture.path << ", id: " << texture.id << '\n';
         }
     }
     return textures;
@@ -173,7 +173,7 @@ unsigned int TextureFromFile(const char *path, const std::string &directory, boo
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        std::cout << "Texture failed to load at path: " << path << '\n';
         stbi_image_free(data);
     }
 

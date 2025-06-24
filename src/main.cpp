@@ -9,7 +9,7 @@
 #include <headers/texture.hpp>
 #include <headers/tranfomation.hpp>
 #include <headers/camera.hpp>
-#include <glm/gtc/matrix_inverse.hpp> 
+
 #include <headers/model.hpp>
 #include <headers/terrarian.hpp>
 
@@ -17,153 +17,29 @@
 
 #include <headers/gui.hpp>
 
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
-#include <imgui/imgui_impl_opengl3.h>
-
 
 #include <headers/cube.hpp>
 
 int main() {
-    float vertices[] = {
-    // Frente (+Z)
-     0.5f,  0.5f,  0.5f,   0, 0, 1,
-     0.5f, -0.5f,  0.5f,   0, 0, 1,
-    -0.5f, -0.5f,  0.5f,   0, 0, 1,
-
-    -0.5f, -0.5f,  0.5f,   0, 0, 1,
-    -0.5f,  0.5f,  0.5f,   0, 0, 1,
-     0.5f,  0.5f,  0.5f,   0, 0, 1,
-
-    // Trás (-Z)
-     0.5f,  0.5f, -0.5f,   0, 0, -1,
-    -0.5f,  0.5f, -0.5f,   0, 0, -1,
-    -0.5f, -0.5f, -0.5f,   0, 0, -1,
-
-    -0.5f, -0.5f, -0.5f,   0, 0, -1,
-     0.5f, -0.5f, -0.5f,   0, 0, -1,
-     0.5f,  0.5f, -0.5f,   0, 0, -1,
-
-    // Direita (+X)
-     0.5f,  0.5f,  0.5f,   1, 0, 0,
-     0.5f,  0.5f, -0.5f,   1, 0, 0,
-     0.5f, -0.5f, -0.5f,   1, 0, 0,
-
-     0.5f, -0.5f, -0.5f,   1, 0, 0,
-     0.5f, -0.5f,  0.5f,   1, 0, 0,
-     0.5f,  0.5f,  0.5f,   1, 0, 0,
-
-    // Esquerda (-X)
-    -0.5f,  0.5f,  0.5f,  -1, 0, 0,
-    -0.5f, -0.5f,  0.5f,  -1, 0, 0,
-    -0.5f, -0.5f, -0.5f,  -1, 0, 0,
-
-    -0.5f, -0.5f, -0.5f,  -1, 0, 0,
-    -0.5f,  0.5f, -0.5f,  -1, 0, 0,
-    -0.5f,  0.5f,  0.5f,  -1, 0, 0,
-
-    // Topo (+Y)
-    -0.5f,  0.5f,  0.5f,   0, 1, 0,
-    -0.5f,  0.5f, -0.5f,   0, 1, 0,
-     0.5f,  0.5f, -0.5f,   0, 1, 0,
-
-     0.5f,  0.5f, -0.5f,   0, 1, 0,
-     0.5f,  0.5f,  0.5f,   0, 1, 0,
-    -0.5f,  0.5f,  0.5f,   0, 1, 0,
-
-    // Fundo (-Y)
-    -0.5f, -0.5f,  0.5f,   0, -1, 0,
-     0.5f, -0.5f,  0.5f,   0, -1, 0,
-     0.5f, -0.5f, -0.5f,   0, -1, 0,
-
-     0.5f, -0.5f, -0.5f,   0, -1, 0,
-    -0.5f, -0.5f, -0.5f,   0, -1, 0,
-    -0.5f, -0.5f,  0.5f,   0, -1, 0
-};
-   float floorVertices[] = {
-    //   X     Y     Z      NX   NY   NZ     U     V
-    -1.0f, 0.0f, -1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f,  // V0
-     1.0f, 0.0f, -1.0f,   0.0f, 1.0f, 0.0f,  1.0f, 0.0f,  // V1
-     1.0f, 0.0f,  1.0f,   0.0f, 1.0f, 0.0f,  1.0f, 1.0f,  // V2
-    -1.0f, 0.0f,  1.0f,   0.0f, 1.0f, 0.0f,  0.0f, 1.0f   // V3
-    };
-    unsigned int floorIndices[] = {
-    0, 1, 2,   // triângulo 1
-    0, 2, 3    // triângulo 2
-    };
-
-    float LightVertices[] = {
-  
-   
-     0.5f,  0.5f,  0.5f,   // 0: frente topo dir
-     0.5f, -0.5f,  0.5f,   // 1: frente baixo dir
-    -0.5f, -0.5f,  0.5f,     // 2: frente baixo esq
-    -0.5f,  0.5f,  0.5f,     // 3: frente topo esq
-
-   
-     0.5f,  0.5f, -0.5f,    // 4: trás topo dir
-     0.5f, -0.5f, -0.5f,  // 5: trás baixo dir
-    -0.5f, -0.5f, -0.5f,   // 6: trás baixo esq
-    -0.5f,  0.5f, -0.5f   // 7: trás topo esq
-};
-
-unsigned int indices[] = {
-    // Frente
-    0, 1, 2,
-    0, 2, 3,
-
-    // Direita
-    0, 4, 5,
-    0, 5, 1,
-
-    // Trás
-    4, 7, 6,
-    4, 6, 5,
-
-    // Esquerda
-    3, 2, 6,
-    3, 6, 7,
-
-    // Topo
-    0, 3, 7,
-    0, 7, 4,
-
-    // Fundo
-    1, 5, 6,
-    1, 6, 2
-};
+    
 
     Core core;
     core.init("janela",800,600);
 
     
-    glm::vec3 lightColor = glm::vec3(1.0f);
+    //glm::vec3 lightColor = glm::vec3(1.0f);
     
    
-    core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
+    //core.loadShaders("model","../shaders/shader.vert","../shaders/shader2.frag");
     //Model mochila("../models/van/van/source/combi.glb");
     // Model mochila("../models/gun/mp7.glb");
     //Model mochila("../models/teste/m2.glb");
-    Model mochila("../models/backpack/backpack.obj");
-    glm::vec3 lightPos = {0.5f,1.0f,-10.f};
-    core.useProgram("model");
-    //core.shaderConfig().setVec3("model","lightPos",lightPos);
-    core.shaderConfig().setFloat("model","light.ambient",0.1);
-    core.shaderConfig().setVec3("model","light.ambient", {1.0f, 0.5f, 0.31f});
-    core.shaderConfig().setVec3("model","light.diffuse", {1.0f, 0.0f, 0.0f});
-    core.shaderConfig().setVec3("model","light.specular", {0.5f, 0.5f, 0.5f});
-    core.shaderConfig().setFloat("model","light.shininess", 0.1f);
-    core.shaderConfig().stop();
-
-
+    //Model mochila("../models/backpack/backpack.obj");
+    //glm::vec3 lightPos = {0.5f,1.0f,-10.f};
+    //core.useProgram("model");
+  
     core.loadShaders("terrarian","../shaders/terrarian.vert","../shaders/terrarian.frag");
     Terrarian terrarian;
-
-
-
-
-    shader teste;
-    shader c;
 
     // core.loadShaders("teste","../shaders/shader.vert","../shaders/shader.frag");
     // core.useProgram("teste");
@@ -195,14 +71,6 @@ unsigned int indices[] = {
     float angle = 0.0f;
     int count =0; 
 
-    const char* glsl_version = "#version 330";
-    
-    // IMGUI_CHECKVERSION();
-    // ImGui::CreateContext();
-    // ImGuiIO& io = ImGui::GetIO(); (void)io;
-    // ImGui::StyleColorsDark();
-    // ImGui_ImplGlfw_InitForOpenGL(core.getWindow(), true);
-    // ImGui_ImplOpenGL3_Init(glsl_version);
     float scale = 1.f;
     float rotation = 45.f;
     glm::vec3 rotatexy = glm::vec3(1.f);
@@ -213,118 +81,38 @@ unsigned int indices[] = {
     core.loadShaders("teste","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
     core.loadShaders("newObjtModel","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
     ObjModel obj;
-    //obj.atrrib("/home/vxsh/Documentos/models/Untitled.obj");
+   
     obj.atrrib("../models/monkey/suzanne.obj");
     obj.setup();
-    obj.print();
+    //obj.print();
     bool wiredActivate = false;
     bool drawCubes = false;
     while(core.isrunning()){
-        
         core.clear();
-    //     float currentTime = glfwGetTime();
-    //     float deltaTime = currentTime - lastFrame;
-    //     lastFrame = currentTime;
-    //     angle += 0.05f;
-        
-    //     //first cube
-    //     core.useProgram("teste");
-    //     vao.bindVAO();
-    //     t.activeText(GL_TEXTURE0);
-    //     t.bindTexture(textura1);
-            // ImGui_ImplOpenGL3_NewFrame();
-            // ImGui_ImplGlfw_NewFrame();
-            // ImGui::NewFrame();
-
             janela.newFrame();
             core.useProgram("terrarian");
-
-            glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.01f,1000.0f);
-            glm::mat4 view = core.CameraConfigs().getCamera();
-            glm::mat4 model2 = glm::mat4(1.0f);
-
-            model2 = glm::translate(model2, glm::vec3(0.0f,-5.0f,20.0f));
-            //model2 = glm::rotate(model2, glm::radians(10.f),core.RendererConfigs().getPositions());
-            core.shaderConfig().setMat4("terrarian","model", model2);
-            core.shaderConfig().setMat4("terrarian","projection",projection);
-            core.shaderConfig().setMat4("terrarian","view",view);
-    
-            terrarian.draw(teste);
-
-            
+            terrarian.draw(core.shaderConfig(),core.CameraConfigs().getCamera());
             core.shaderConfig().stop();
 
-            // core.useProgram("model");
-       
-            // glm::mat4 model = glm::mat4(1.0f);
-            // model = glm::translate(model, glm::vec3((float)rotatexy.x,(float)rotatexy.y,-10.f));
-            // model = glm::scale(model,glm::vec3(scale));
-            // model = glm::rotate(model, glm::radians(rotation),core.RendererConfigs().getPositions());
-            // core.shaderConfig().setMat4("model","model", model);
-            // core.shaderConfig().setMat4("model","projection",projection);
-            // core.shaderConfig().setMat4("model","view",view);
-            // core.shaderConfig().setFloat("model", "light.shininess", 20.0f);
-            // glm::vec3 camView = glm::vec3(glm::inverse(view)[3]);
-            // core.shaderConfig().setVec3("model","camPos",camView);
-            // mochila.DrawModel(teste,"model");
-       
-            // core.shaderConfig().stop();
             core.useProgram("newObjtModel");
             obj.draw(core.shaderConfig(),"newObjtModel",core.CameraConfigs().getCamera());
             
             core.shaderConfig().stop();
-            janela.showDemo();
-            core.useProgram("teste");
-            janela.inteface();
-            // ImGui::Begin("Janela Teste");
-            // ImGui::Text("Funcionando!");
-            // ImGui::SliderFloat("Scale",&scale,0.5f,10.0f);
-            // ImGui::SliderFloat("rotation",&rotation,-90.f,90.0f);
-            // ImGui::SliderFloat("rotation x",&rotatexy.x,-90.f,90.0f);
-            // ImGui::SliderFloat("rotation y",&rotatexy.y,-90.f,90.0f);
-            janela.Button("cube x",'x', [&](char c){ cube.createCubes(c);});
-            janela.Button("cube y",'y',[&](char c){ cube.createCubes(c);});
-            janela.Button("cube z",'z',[&](char c){ cube.createCubes(c);});
-            janela.Button("cube <",'<',[&](char c){ cube.createCubes(c);});
-            // if(ImGui::Button("cube x")){
-            //     cube.createCubes('x');
-            // }
-            // if(ImGui::Button("cube y")){
-            //     cube.createCubes('y');
-                
-            // }
-            // if(ImGui::Button("cube z")){
-            //     cube.createCubes('z');
-                
-            // }
-            // if(ImGui::Button("<")){
-            //     cube.createCubes('<');
-                
-            // }
-
-            janela.CheckBox("wiredMode",wiredActivate,[&](bool newvalue){core.RendererConfigs().wiredMode(newvalue);});
-           // janela.slideObject("model position",obj.getPosition());
-            janela.CheckBox("showAnotherWindow",janela.getAnotherwindow(),obj.getPosition());
-            //janela.CheckBox("draw",&drawCubes,core.RendererConfigs().wiredMode);
-            //cube.draw(core.shaderConfig(),"teste",core.CameraConfigs().getCamera());
-
-            // if(ImGui::Checkbox("wiredMode",&wiredActivate)){
-            //     core.RendererConfigs().wiredMode(wiredActivate);
-            // }
-            // if(ImGui::Checkbox("draw",&drawCubes)){
-            // }
             
-
-            //ImGui::End();
-            //ImGui::Render();
+            janela.showDemo();
+            janela.inteface();
+           
+            janela.CheckBox("wiredMode",wiredActivate,[&](bool newvalue){core.RendererConfigs().wiredMode(newvalue);});
+            janela.headersWithSliders("Rotate Object","Rotate to",obj.getRotateposition());
+            janela.headersWithSliders("Move Object","Move to",obj.getPosition());
+            janela.headersWithSliders("Move the Light Source","Move light to",obj.getLightPos());
+        
             core.shaderConfig().stop();
             janela.close();
-            //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
        
         core.run();
+        core.fpsCounter();
            
-        
-        
     }
     cube.clearCubes();
     ImGui_ImplOpenGL3_Shutdown();

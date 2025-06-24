@@ -14,7 +14,7 @@ class Terrarian{
     std::vector<unsigned int> indices; 
     glm::vec3 color = glm::vec3(1.f);
     Terrarian(){setupTerrarian(); initBuffers();};
-    void draw(shader &shader);
+    void draw(shader &shader,glm::mat4 vi);
     private:
     void initBuffers();
     void setupTerrarian();

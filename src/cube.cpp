@@ -17,7 +17,7 @@ void Cube::setupBuffers(){
     vao.unbidVAO();
     ebo.unbidEBO();
     vbo.unbidVBO();
-    std::cout << "buffers setados" << std::endl;
+    std::cout << "buffers setados" << '\n';
 }
 
 void Cube::draw(shader &Shader,const std::string &nameshader,glm::mat4 view){
@@ -149,13 +149,13 @@ void Cube::createCubes(char x){
     lastPositionx.insert(lastPositionx.begin(),newPositions.begin(),newPositions.end());
     newPositions.clear();
     //cubePositions.push_back(lastPos + offset);
-    //std::cout << cubePositions.size() << std::endl;
+    //std::cout << cubePositions.size() << '\n';
     
 }
 
 void printY(std::vector<glm::vec3> lastPositiony,glm::vec3 offset,std::vector<glm::vec3> cubePositions){
     for(unsigned int i = 0 ;i< lastPositiony.size()  ;i++){
-        std::cout << "x:"<<lastPositiony[i].x << " y:" <<lastPositiony[i].y << " z:" << lastPositiony[i].z  << std::endl;
+        std::cout << "x:"<<lastPositiony[i].x << " y:" <<lastPositiony[i].y << " z:" << lastPositiony[i].z  << '\n';
     }
        
 } 

@@ -75,11 +75,11 @@ void Renderer::processInput(){
     if(glfwGetKey(window,GLFW_KEY_F8) == GLFW_PRESS){
         if(!count){
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            std::cout << count << std::endl;
+            std::cout << count << '\n';
             count = 1;
         }else{
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            std::cout << count << std::endl;
+            std::cout << count << '\n';
             count = 0;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

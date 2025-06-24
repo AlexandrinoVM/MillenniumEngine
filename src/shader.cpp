@@ -18,7 +18,7 @@ std::string shader::loadSource(const std::string &pathShader){
             return shaderCode;
 
         }catch(std::ifstream::failure e){
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << '\n';
             return "";
         }
 }
@@ -33,7 +33,7 @@ void shader::Loadshader(const std::string &ShaderName,const std::string &vertfra
 
 
     if (vert.empty() || frag.empty()) {
-    std::cerr << "Shader source is empty!" << std::endl;
+    std::cerr << "Shader source is empty!" << '\n';
     return;
     }
     const char *vertexShaderSource = vert.c_str();
@@ -69,7 +69,7 @@ void shader::Loadshader(const std::string &ShaderName,const std::string &vertfra
     
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);  
-    std::cout <<ShaderName << ":" <<ID << std::endl;
+    std::cout <<ShaderName << ":" <<ID << '\n';
     shaders.insert(std::make_pair(ShaderName,ID));
 }
 
@@ -86,7 +86,7 @@ void shader::crateProgram(const unsigned int vert,const unsigned int frag){
     glGetShaderiv(ID,GL_LINK_STATUS,&sucess);
     if(!sucess){
         glGetShaderInfoLog(ID,512,NULL,infolog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infolog << std::endl;
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infolog << '\n';
     }
 }
 

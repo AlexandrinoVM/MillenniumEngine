@@ -20,7 +20,7 @@ unsigned int Texture::generateTexture(){
         glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }else{
-        std::cout << "Failed to load texture" << std::endl;
+        std::cout << "Failed to load texture" << '\n';
     }
     stbi_image_free(data);
     return texture;

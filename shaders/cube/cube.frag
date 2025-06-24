@@ -14,7 +14,8 @@ struct Light{
     float shininess;
 };
 
-
+//light source
+uniform vec3 lightSource;
 
 void main() {
     vec3 ambient = vec3(0.5,0.5,0.5f);
@@ -24,8 +25,7 @@ void main() {
     vec3 modelColor = vec3(0.7, 0.06, 0.06);
     //light color
     vec3 lightcolor = vec3(0.87, 0.27, 0.27);
-    //light source
-    vec3 lightSource = vec3(-2.5f,1.0f,3.f);
+    //vec3 lightSource = vec3(-2.5f,1.0f,3.f);
     float diffuseStrenth = max(0.0,dot(lightSource,normal));
     vec3 diffuse = diffuseStrenth * lightcolor;
 

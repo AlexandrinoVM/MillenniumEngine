@@ -8,7 +8,7 @@ void ObjModel::atrrib(const char*filename,const char* mode){
     std::vector<glm::vec3> temp_normals;
     std::vector<glm::vec2> temp_texts;
     if(file == NULL){
-        std::cout << "ERROR::COULD::NOT::OPEN::MODEL::DATA" << std::endl;
+        std::cout << "ERROR::COULD::NOT::OPEN::MODEL::DATA" << '\n';
         return;
     }
     while(1){
@@ -39,7 +39,7 @@ void ObjModel::atrrib(const char*filename,const char* mode){
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
             if(matches != 9){
-                std::cout << "ERROR::COULD::NOT::READ::MODEL::DATA" << std::endl;
+                std::cout << "ERROR::COULD::NOT::READ::MODEL::DATA" << '\n';
                 return;
             }
             vertexIndices.push_back(vertexIndex[0]);
@@ -114,26 +114,26 @@ void ObjModel::atrrib(const char*filename,const char* mode){
 };
 
 void ObjModel::print(){
-    std::cout << "------------------------VERTICES-------------------------------" << std::endl;
-    for(int i =0;i<vertices.size();i++){
-       std::cout<< "x:"<< vertices[i].x<< " y:"<< vertices[i].y << " z:"<< vertices[i].z<< std::endl;
-    }
-    // std::cout << "------------------------NORMALS-------------------------------" << std::endl;
-    //  for(int j =0;j<Normals.size();j++){
-    //     std::cout<< "x:"<< Normals[j].x<< " y:"<< Normals[j].y << " z:"<< Normals[j].z<< std::endl;
+    // std::cout << "------------------------VERTICES-------------------------------" << '\n';
+    // for(int i =0;i<vertices.size();i++){
+    //    std::cout<< "x:"<< vertices[i].x<< " y:"<< vertices[i].y << " z:"<< vertices[i].z<< '\n';
     // }
-    //  std::cout << "------------------------TEXTURES-------------------------------" << std::endl;
+    // std::cout << "------------------------NORMALS-------------------------------" << '\n';
+    //  for(int j =0;j<Normals.size();j++){
+    //     std::cout<< "x:"<< Normals[j].x<< " y:"<< Normals[j].y << " z:"<< Normals[j].z<< '\n';
+    // }
+    //  std::cout << "------------------------TEXTURES-------------------------------" << '\n';
     //  for(int k =0;k<textures.size();k++){
-    //     std::cout<< "x:"<< textures[k].x<< " y:"<< textures[k].y << std::endl;
+    //     std::cout<< "x:"<< textures[k].x<< " y:"<< textures[k].y << '\n';
     // }
 
-     std::cout << "------------------------INDICES-------------------------------" << std::endl;
-     for(int j =0;j<indices.size();j+=3){
-        if(j + 1 > indices.size()){
-            break;
-        }
-        std::cout<< "x:"<< indices[j]<< " y:"<< indices[j+1]<< " z:"<< indices[j+2]<< std::endl;
-    }
+    //  std::cout << "------------------------INDICES-------------------------------" << '\n';
+    //  for(int j =0;j<indices.size();j+=3){
+    //     if(j + 1 > indices.size()){
+    //         break;
+    //     }
+    //     std::cout<< "x:"<< indices[j]<< " y:"<< indices[j+1]<< " z:"<< indices[j+2]<< '\n';
+    // }
    
 }
 void ObjModel::setup(){
@@ -149,23 +149,23 @@ void ObjModel::setup(){
     vbo.setData(Normals);
     vao.VAOatribs(1,3,sizeof(glm::vec3),0);
     ebo.setData(indices);
-    std::cout<< "vertices:"<< vertices.size()<<  std::endl;
-    std::cout<< "indices:"<< indices.size()<<  std::endl;
     vao.unbidVAO();
     vbo.unbidVBO();
     ebo.unbidEBO();
 }
 
 void ObjModel::draw(shader& shader,const std::string&nama,glm::mat4 view){
-    vao.bindVAO();
     glm::mat4 model(1.f);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.01f,1000.0f);
+    
     model = glm::translate(model,position);
+    model = glm::rotate(model,glm::radians(45.f),rotatePos);
     model = glm::scale(model,glm::vec3(2.f));
     shader.setMat4(nama,"model",model);
     shader.setMat4(nama,"projection",projection);
     shader.setMat4(nama,"view",view);
-    //glDrawArrays(GL_TRIANGLES,0,vertices.size());
+    shader.setVec3(nama,"lightSource",lightPos);
+    vao.bindVAO();
     glDrawElements(GL_TRIANGLES, indices.size() ,GL_UNSIGNED_INT, 0);
     vao.unbidVAO();
 }

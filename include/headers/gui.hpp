@@ -1,3 +1,4 @@
+#pragma once
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -19,8 +20,10 @@ class GUI{
     void CheckBox(const std::string& nameButton,bool &bolean,std::function<void(bool)>callbac );
     void CheckBox(const std::string& nameButton,bool &bolean,glm::vec3 &data);
     void showDemo(){bool demo = true;ImGui::ShowDemoWindow(&demo); };
-    void slideObject(glm::vec3 &data);
-    void showAnotherwindow(glm::vec3 &data);
+    void slideObject(const std::string& name,glm::vec3 &data);
+    void slider(const std::string& name,glm::vec3 &data);
+    void showAnotherwindow(const std::string& name,glm::vec3 &data);
+    void headersWithSliders(const std::string& nameHeader,const std::string& name,glm::vec3 &data);
     private:
     bool objectWindow = false;
 };

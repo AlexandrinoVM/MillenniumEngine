@@ -40,26 +40,33 @@ void GUI::CheckBox(const std::string& nameButton,bool &bolean,std::function<void
 void GUI::CheckBox(const std::string& nameButton,bool &bolean,glm::vec3 &data){
     ImGui::Checkbox(nameButton.c_str(),&bolean);
     if(getAnotherwindow()){
-        showAnotherwindow(data);
+        showAnotherwindow(nameButton,data);
     }
 }
 
-void GUI::showAnotherwindow(glm::vec3 &data){
+void GUI::showAnotherwindow(const std::string &name,glm::vec3 &data){
     if(objectWindow){
     ImGui::Begin("Another Window", &objectWindow);   
     ImGui::Text("Hello from another window!");
     if (ImGui::Button("Close Me")){
         objectWindow = false;
     }
-    slideObject(data);
+    ImGui::Text("position object");
+    slideObject(name,data);
 
     ImGui::End(); 
     }
 }
 
-void GUI::slideObject(glm::vec3 &data){
-   ImGui::SliderFloat("x",&data.x,-5.f,10.f,"%.3f",0);
-   ImGui::SliderFloat("y",&data.y,-60.f,60.f,"%.3f",0);
-   ImGui::SliderFloat("z",&data.z,-60.f,60.f,"%.3f",0);
+void GUI::slideObject(const std::string& name,glm::vec3 &data){
+   std::string nameSlider = name + ":"; 
+   ImGui::SliderFloat((nameSlider+"x").c_str(),&data.x,-5.f,10.f,"%.2f",0);
+   ImGui::SliderFloat((nameSlider+"y").c_str(),&data.y,-5.f,10.f,"%.2f",0);
+   ImGui::SliderFloat((nameSlider+"z").c_str(),&data.z,-5.f,10.f,"%.2f",0);
+}
 
+void GUI::headersWithSliders(const std::string& nameHeader, const std::string& nameSliders,glm::vec3 &data){
+    if(ImGui::CollapsingHeader(nameHeader.c_str())){
+        slideObject(nameSliders,data);
+    }
 }
