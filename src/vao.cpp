@@ -21,13 +21,13 @@ void VAO::unbidVAO(){
 }
 
 void VAO::VAOatribs(int location,int quantPos,int stride,int offset){
-    if(quantPos == 2){
-        glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex,Textcoords));
-        glEnableVertexAttribArray(location);
-    }else{
+    // if(quantPos == 2){
+    //     glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)(0));
+    //     glEnableVertexAttribArray(location);
+    // }else{
         glVertexAttribPointer(location, quantPos, GL_FLOAT, GL_FALSE, stride, (void*)(offset * sizeof(float)));
         glEnableVertexAttribArray(location); 
-    }
+    // }
 }
 
 void VAO::VAOatribs(int location,int quantPos,int stride,int offset,int type){

@@ -4,38 +4,52 @@ out vec4 FragColor;
 in vec3 normal;
 in vec3 fraPos;
 in vec3 vi;
+in vec2 textCoord;
 
-struct Light{
+struct Light {
     vec3 position;
-
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+};
+
+struct Material {
+    sampler2D diffuse;
     float shininess;
 };
 
-//light source
-uniform vec3 lightSource;
+in float instancedIds;
+
+uniform Material material;
+uniform Light light;
 
 void main() {
-    vec3 ambient = vec3(0.5,0.5,0.5f);
+    // Normalize
     vec3 norm = normalize(normal);
-    //source lightining
-    vec3 lightining = ambient;
-    vec3 modelColor = vec3(0.7, 0.06, 0.06);
-    //light color
-    vec3 lightcolor = vec3(0.87, 0.27, 0.27);
-    //vec3 lightSource = vec3(-2.5f,1.0f,3.f);
-    float diffuseStrenth = max(0.0,dot(lightSource,normal));
-    vec3 diffuse = diffuseStrenth * lightcolor;
+    vec3 lightDir = normalize(light.position - fraPos);
+    vec3 viewDir = normalize(vi);
+    vec3 reflectDir = reflect(-lightDir, norm);
 
-    vec3 vviewSource = normalize(vi);
-    vec3 reflection = normalize(reflect(-lightSource,norm));
-    float specularStrenth = max(0.0,dot(vviewSource,reflection));
-    specularStrenth = pow(specularStrenth,32.f);
-    vec3 especular = specularStrenth * lightcolor;
-    lightining = ambient * 0.0 + diffuse * 0.5f + especular;
+    // Ambient                      case have texture
+    vec3 ambient = light.ambient ;//* texture(material.diffuse, textCoord).rgb;
+    vec3 colorwhite = vec3(1.f);
+    // Diffuse
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = light.diffuse * diff;//* texture(material.diffuse, textCoord).rgb;
+    // vec3 diffuse = light.diffuse * diff;//* texture(material.diffuse, textCoord).rgb;
 
-    vec3 color = lightining * modelColor;
-    FragColor = vec4(color, 1.0);
+    // Specular
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    vec3 specular = light.specular * spec;
+
+    vec3 result = ambient + diffuse + specular;
+    uint colorsid = uint(instancedIds);
+    vec3 finalcolors = vec3(
+        float((colorsid & 0x000000FFu))/255.0,
+        float((colorsid &  0x0000FF00u)>>8)/255.0,
+        float((colorsid & 0x00FF0000u)>> 16)/255.0
+    );
+
+    // FragColor = vec4(result, 1.0);
+    FragColor = vec4(finalcolors, 1.0);
 }

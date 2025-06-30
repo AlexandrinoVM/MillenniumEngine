@@ -1,8 +1,50 @@
 #include "headers/objModel.hpp"
 
 
+void ObjModel::setupInstancedObjes(){
+    if(instaces.size() == 0 && InstancedQtd > 1){
+        glm::vec3 data;
+        for(int i=0;i<InstancedQtd; i++){
+            int randonX = std::rand() % 101;
+            int randonY = std::rand() % 50;
+            int randonZ = std::rand() % -101;
+                data.x = (float)randonX;
+                data.y = (float)randonY;
+                data.z = (float)randonZ;
+            instaces.push_back(data);
+        }
+        for(int i=0;i<InstancedQtd; i++){
+            glm::mat4 model =glm::mat4(1.f);
+            instancesMath.push_back(glm::translate(glm::mat4(1.0f),(instaces[i])));
+        }
+        
+        instanceObjsVbo.bindVBO();
+        instanceObjsVbo.setData(instancesMath);
+    }else{
+        instanceObjsVbo.bindVBO();
+    }
+    glEnableVertexAttribArray(3);
+    for (unsigned int i = 0; i < 4; i++) {
+    glEnableVertexAttribArray(3 + i);
+    glVertexAttribPointer(3 + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * i * 4));
+    glVertexAttribDivisor(3 + i, 1);
+    }
+    // vao.VAOatribs(3,3,instancesMath.size() *  sizeof(glm::mat4),0);
+    // glVertexAttribDivisor(3,1);
+    instanceObjsVbo.unbidVBO();
+    
+    
+}
+
+
 void ObjModel::atrrib(const char*filename,const char* mode){
-    FILE *file = fopen(filename,mode);
+    
+    std::filesystem::path pathModel = filename;
+    searchFiles(pathModel);
+
+    const char *test= objModelPath.data();
+    FILE *file = fopen(test,mode);
+    
     std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
     std::vector<glm::vec3> temp_Vertices;
     std::vector<glm::vec3> temp_normals;
@@ -35,83 +77,90 @@ void ObjModel::atrrib(const char*filename,const char* mode){
             temp_normals.push_back(tempNormals);
         }
         else if(strcmp(lineHeader,"f")== 0){
+            
             std::string Vertex1,Vertex2,Vertex3;
-            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-            if(matches != 9){
+            unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
+            int moreThenThre = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2],&vertexIndex[3], &uvIndex[3], &normalIndex[3] );
+            //int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+            //std::cout << "matchs:"<<matches << '\n';
+            
+            if(moreThenThre == 12){
+                vertexIndices.push_back(vertexIndex[0]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                uvIndices.push_back(uvIndex[0]);
+                uvIndices.push_back(uvIndex[1]);
+                uvIndices.push_back(uvIndex[2]);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[2]);
+
+                
+                vertexIndices.push_back(vertexIndex[0]);
+                vertexIndices.push_back(vertexIndex[2]);
+                vertexIndices.push_back(vertexIndex[3]);
+                uvIndices.push_back(uvIndex[0]);
+                uvIndices.push_back(uvIndex[2]);
+                uvIndices.push_back(uvIndex[3]);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[2]);
+                normalIndices.push_back(normalIndex[3]);
+
+
+            }else if(moreThenThre == 9 ){
+                vertexIndices.push_back(vertexIndex[0]);
+                vertexIndices.push_back(vertexIndex[1]);
+                vertexIndices.push_back(vertexIndex[2]);
+                uvIndices    .push_back(uvIndex[0]);
+                uvIndices    .push_back(uvIndex[1]);
+                uvIndices    .push_back(uvIndex[2]);
+                normalIndices.push_back(normalIndex[0]);
+                normalIndices.push_back(normalIndex[1]);
+                normalIndices.push_back(normalIndex[2]);
+            }else{
                 std::cout << "ERROR::COULD::NOT::READ::MODEL::DATA" << '\n';
                 return;
             }
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
-            uvIndices    .push_back(uvIndex[0]);
-            uvIndices    .push_back(uvIndex[1]);
-            uvIndices    .push_back(uvIndex[2]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
         }
         
     }
-
-//     for (unsigned int i = 0; i < vertexIndices.size(); ++i) {
-//     unsigned int vertexIndex = vertexIndices[i];
-//     // Os arquivos .obj começam em 1, por isso vertexIndex - 1
-//         glm::vec3 vertex = temp_Vertices[vertexIndex - 1];
-//         indices.push_back(vertex.x);
-//         indices.push_back(vertex.y);
-//         indices.push_back(vertex.z);
-// }
     
+    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+        glm::vec3 vertex  = temp_Vertices[vertexIndices[i] - 1];
+        glm::vec3 normal  = temp_normals[normalIndices[i] - 1];
+        glm::vec2 uv      = temp_texts[uvIndices[i] - 1];
 
-   
-
-    // for (auto index : vertexIndices) {
-    //     finalVertices.push_back(temp_Vertices[index - 1]);
-    // }
-    
-    // std::vector<unsigned int> indices;
-    // for (auto index : vertexIndices) {
-    //     indices.push_back(index - 1);  // Corrige para base 0
-    // }
-    //indices.push_back(indices.begin(),finalVertices.begin(),finalVertices.end());
-
-    // for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-    //     unsigned int vertexIndex = vertexIndices[i];
-    //     glm::vec3 vertex = temp_Vertices[ vertexIndex-1 ];
-    //     vertices.push_back(vertex);
-    // }
-    for(const auto&vert : temp_Vertices){
-        vertices.push_back(vert);
-    }
-
-    for(const auto&vert : temp_Vertices){
-        Normals.push_back(vert);
-    }
-
-     for( unsigned int i=0; i<vertexIndices.size(); i++ ){
-        indices.push_back(vertexIndices[i] -1);
-    }
-
-    for (unsigned int i = 0; i < uvIndices.size(); i++) {
-        unsigned int uvIndex = uvIndices[i];
-        glm::vec2 uv = temp_texts[uvIndex - 1];
+        vertices.push_back(vertex);
+        Normals.push_back(normal);
         textures.push_back(uv);
+
+        indices.push_back(i); 
     }
     
-   
-
-    // for( unsigned int i=0;i<normalIndices.size(); i++ ){
-    //     unsigned int normalIndice =normalIndices[i];
-    //     glm::vec3 vertex = temp_Vertices[normalIndice -1];
-    //     Normals.push_back(vertex);
-    // }
-
-    //vertices.insert(vertices.begin(),temp_Vertices.begin(),temp_Vertices.end());
-    //indices.insert(indices.begin(),vertexIndices.begin(),vertexIndices.end());
    
 };
+
+std::string toLower(std::string str){
+    std::transform(str.begin(),str.end(),str.begin(),[](unsigned char c){return std::towlower(c);});
+    return str;
+}
+
+void ObjModel::searchFiles(std::filesystem::path &path){
+    std::string occurency;
+
+     if(std::filesystem::exists(path) && std::filesystem::is_directory(path)){
+        for (const auto &entry : std::filesystem::recursive_directory_iterator(path)) {
+        occurency = toLower(entry.path().c_str());
+        if(occurency.find(".jpg") != std::string::npos){
+            TextureDiffusePath = entry.path().c_str();
+        }else if(occurency.find(".obj") != std::string::npos){
+            objModelPath = entry.path().c_str();
+        }
+    }
+    }else{
+       return;
+    }
+}
 
 void ObjModel::print(){
     // std::cout << "------------------------VERTICES-------------------------------" << '\n';
@@ -137,36 +186,76 @@ void ObjModel::print(){
    
 }
 void ObjModel::setup(){
+    setupInstancedObjes();
+    if(!TextureDiffusePath.empty()){
+        text.TexTureSetup(TextureDiffusePath.c_str(),GL_TEXTURE0);
+    }
+
     
-  
-    //createIndexedMesh(finalVertices, uniqueVertices, indices);
+    for (size_t i = 0; i < vertices.size(); ++i) {
+    SendData data;
+    data.vertices = vertices[i];      
+    data.Normals  = Normals[i];       
+    data.texts    = textures[i];      
+    finalData.push_back(data);
+    }
    
     vao.bindVAO();
     vbo.bindVBO();
     ebo.bindEBO();
-    vbo.setData(vertices);
-    vao.VAOatribs(0,3,sizeof(glm::vec3),0);
-    vbo.setData(Normals);
-    vao.VAOatribs(1,3,sizeof(glm::vec3),0);
+       
+    vbo.setData(finalData);
+    vao.VAOatribs(0,3,sizeof(SendData),0);
+    vao.VAOatribs(1,3,sizeof(SendData),offsetof(SendData,Normals));
+    vao.VAOatribs(2,2,sizeof(SendData),offsetof(SendData,texts));
+
     ebo.setData(indices);
     vao.unbidVAO();
     vbo.unbidVBO();
-    ebo.unbidEBO();
 }
 
 void ObjModel::draw(shader& shader,const std::string&nama,glm::mat4 view){
     glm::mat4 model(1.f);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f),800.0f/600.0f,0.01f,1000.0f);
-    
-    model = glm::translate(model,position);
-    model = glm::rotate(model,glm::radians(45.f),rotatePos);
-    model = glm::scale(model,glm::vec3(2.f));
-    shader.setMat4(nama,"model",model);
-    shader.setMat4(nama,"projection",projection);
-    shader.setMat4(nama,"view",view);
-    shader.setVec3(nama,"lightSource",lightPos);
+    if(instaces.size() > 0){
+        shader.setMat4(nama,"model",model);
+        shader.setMat4(nama,"projection",projection);
+        shader.setMat4(nama,"view",view);
+        shader.setVec3(nama,"light.position",lightPos);
+        shader.setVec3(nama,"light.ambient",objColor);
+        shader.setVec3(nama,"light.diffuse",glm::vec3(1.0));
+        shader.setVec3(nama,"light.specular",glm::vec3(1.0f));
+        shader.setFloat(nama,"material.shininess", 32.0f);
+    }else{
+        model = glm::translate(model,position);
+        model = glm::rotate(model,glm::radians(45.f),rotatePos);
+        model = glm::scale(model,glm::vec3(2.f));
+        shader.setMat4(nama,"model",model);
+        shader.setMat4(nama,"projection",projection);
+        shader.setMat4(nama,"view",view);
+        shader.setVec3(nama,"light.position",lightPos);
+        shader.setVec3(nama,"light.ambient",objColor);
+        shader.setVec3(nama,"light.diffuse",glm::vec3(1.0));
+        shader.setVec3(nama,"light.specular",glm::vec3(1.0f));
+        shader.setFloat(nama,"material.shininess", 32.0f);
+
+    }
+    if(!TextureDiffusePath.empty()){
+        text.activeText();
+        text.TextureBind();
+        shader.setint(nama,"material.diffuse",0);
+    }
     vao.bindVAO();
-    glDrawElements(GL_TRIANGLES, indices.size() ,GL_UNSIGNED_INT, 0);
+    if(InstancedQtd > 1){
+        if(instaces.size() == 0){
+            setupInstancedObjes();
+        }
+        glDrawElementsInstanced(GL_TRIANGLES,indices.size(),GL_UNSIGNED_INT,0,instancesMath.size());
+    }else{
+        glDrawElements(GL_TRIANGLES, indices.size() ,GL_UNSIGNED_INT, 0);
+    }
     vao.unbidVAO();
+    //glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
 }
 

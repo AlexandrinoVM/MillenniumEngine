@@ -18,8 +18,9 @@ class Renderer{
     void RenderWindow();
     void clear();
     glm::vec3 getPositions(){return positions;};
+    void pickColor(double x,double y);
     private:
-    
+    double mx,my;
     bool running;
     int count = 0;
     glm::vec3 positions =glm::vec3(1.0f);

@@ -33,6 +33,7 @@ void GUI::Button(const std::string& nameButton,char x,std::function<void(char)>c
 }
 
 void GUI::CheckBox(const std::string& nameButton,bool &bolean,std::function<void(bool)>callback ){
+// void GUI::CheckBox(const std::string& nameButton,bool &bolean,void(*func)(bool) ){
     if(ImGui::Checkbox(nameButton.c_str(),&bolean)){
         callback(bolean);
     }
@@ -69,4 +70,14 @@ void GUI::headersWithSliders(const std::string& nameHeader, const std::string& n
     if(ImGui::CollapsingHeader(nameHeader.c_str())){
         slideObject(nameSliders,data);
     }
+}
+
+void GUI::coloPickermenu(glm::vec3 &color ) {
+    float newColor[3] = {color.x,color.y,color.z};
+    if(ImGui::ColorEdit3("object color",newColor)){
+        color.x = newColor[0];
+        color.y = newColor[1];
+        color.z = newColor[2];
+    }
+    
 }

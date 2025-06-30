@@ -7,6 +7,14 @@ void Texture::loadTexture(const char *Path){
     
 }
 
+void Texture::TexTureSetup(const char*Path,unsigned int TextType){
+    reverseImage();
+    std::cout << Path << std::endl;
+    loadTexture(Path);
+    TextureId = generateTexture();
+}
+
+
 unsigned int Texture::generateTexture(){
     unsigned int texture;
     glGenTextures(1,&texture);

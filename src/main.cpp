@@ -81,32 +81,40 @@ int main() {
     core.loadShaders("teste","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
     core.loadShaders("newObjtModel","../shaders/cube/cube.vert","../shaders/cube/cube.frag");
     ObjModel obj;
-   
-    obj.atrrib("../models/monkey/suzanne.obj");
+   //Texture texut;
+    //obj.atrrib("../models/monkey/suzanne.obj");
+    obj.atrrib("../models/monkey/");
+    // obj.atrrib("/home/vxsh/Documentos/models/female-hand/source/hand.OBJ");
     obj.setup();
-    //obj.print();
+    //texut.loadTexture("../models/backpack/diffuse.jpg");
+    //unsigned int hand = texut.generateTexture();
+    //texut.reverseImage();
+    obj.print();
     bool wiredActivate = false;
     bool drawCubes = false;
     while(core.isrunning()){
         core.clear();
-            janela.newFrame();
-            core.useProgram("terrarian");
-            terrarian.draw(core.shaderConfig(),core.CameraConfigs().getCamera());
-            core.shaderConfig().stop();
-
-            core.useProgram("newObjtModel");
-            obj.draw(core.shaderConfig(),"newObjtModel",core.CameraConfigs().getCamera());
-            
-            core.shaderConfig().stop();
-            
-            janela.showDemo();
-            janela.inteface();
-           
-            janela.CheckBox("wiredMode",wiredActivate,[&](bool newvalue){core.RendererConfigs().wiredMode(newvalue);});
+        janela.newFrame();
+        core.useProgram("terrarian");
+        terrarian.draw(core.shaderConfig(),core.CameraConfigs().getCamera());
+        core.shaderConfig().stop();
+        
+        core.useProgram("newObjtModel");
+      //  texut.activeText(GL_TEXTURE0);
+        //texut.bindTexture(hand);
+        obj.draw(core.shaderConfig(),"newObjtModel",core.CameraConfigs().getCamera());
+        
+        core.shaderConfig().stop();
+        
+        janela.showDemo();
+        janela.inteface();
+        
+            // janela.CheckBox("wiredMode",wiredActivate,[&](bool newvalue){core.RendererConfigs().wiredMode(newvalue);});
+            janela.CheckBox("wiredMode",wiredActivate,[&](bool newval){core.RendererConfigs().wiredMode(newval);});
             janela.headersWithSliders("Rotate Object","Rotate to",obj.getRotateposition());
             janela.headersWithSliders("Move Object","Move to",obj.getPosition());
             janela.headersWithSliders("Move the Light Source","Move light to",obj.getLightPos());
-        
+            janela.coloPickermenu(obj.getobjColor());
             core.shaderConfig().stop();
             janela.close();
        

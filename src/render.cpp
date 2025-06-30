@@ -138,6 +138,21 @@ void Renderer::processInput(){
     //         glfwSetCursorPosCallback(window,nullptr);
     //     }
     // }
+    if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)== GLFW_PRESS){
+        glfwGetCursorPos(window,&mx,&my);
+        pickColor(mx,my);
+    }
+}
+void Renderer::pickColor(double x,double y){
+    unsigned char pixel[4];
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT,viewport);
+    glReadBuffer(GL_BACK);
+    glReadPixels(x,viewport[3]-y,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&pixel);
+    std::cout << "Pixel RGBA: " << (int)pixel[0] << ", " << (int)pixel[1] << ", " << (int)pixel[2] << "\n";
+    int id = pixel[0] + (pixel[1] << 8) + (pixel[2] << 16);
+    std::cout << "clicked object " << id << "\n";
+    
 }
 
 void Renderer::clear(){
